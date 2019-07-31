@@ -8,11 +8,19 @@
 <script lang="ts">
 import Vue from 'vue';
 import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
+import { get, post } from '../api';
 
 export default Vue.extend({
   name: 'home',
   components: {
     HelloWorld,
+  },
+  created() {
+      post('/user', {
+          id: 9
+      }).then(res => {
+          console.log(res, 'res')
+      });
   },
 });
 </script>
