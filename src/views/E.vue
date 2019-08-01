@@ -1,8 +1,8 @@
 <template lang="html">
-    <div class="">
+    <div class="box-chat">
         <editor
         v-model="result"></editor>
-        <input type="button" name="name" value="submit" @click="submit">
+        <el-button type="success" round @click="submit">发送</el-button>
     </div>
 </template>
 
@@ -28,5 +28,12 @@ export default {
 </script>
 
 <style lang="less">
-
+    .box-chat {
+        position: relative;
+        .el-button {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+        }
+    }
 </style>

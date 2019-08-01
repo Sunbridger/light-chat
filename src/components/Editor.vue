@@ -131,10 +131,16 @@ export default {
   width: 80%;
   margin: 0 auto;
   .w-e-text {
-      border: 1px solid blue;
-      overflow-y: unset;
+    max-height: 150px;
+    overflow-y: scroll;
+    color: #606266;
+    background-color: #FFF;
+    border: 1px solid #DCDFE6;
+    border-radius: 4px;
       img{
           width: 20px;
+          vertical-align: -3px;
+          margin-left: 3px;
       }
   };
   .w-e-panel-container {
@@ -145,5 +151,26 @@ export default {
       left: unset!important;
   }
 }
+        ::-webkit-scrollbar
+        {
+            width: 2px;
+            height: 2px;
+            background-color: white;/*//背景色*/
+        }
 
+        /*定义滚动条轨道 内阴影+圆角*//* 滚动槽 */
+        ::-webkit-scrollbar-track
+        {
+            -webkit-box-shadow: inset 0 0 1px white;
+            border-radius: 1px;
+            background-color: white;/*滚动条槽的颜色*/
+        }
+
+        /*定义滑块 内阴影+圆角*//* 滚动条滑块 */
+        ::-webkit-scrollbar-thumb
+        {
+            border-radius: 10px;
+            -webkit-box-shadow: inset 0 0 1px white;
+            background-color: white;
+        }
 </style>
