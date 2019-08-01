@@ -1,21 +1,22 @@
 <template lang="html">
   <div class="editor">
-    <div ref="toolbar" class="toolbar">
-    </div>
-    <div ref="editor" class="text">
-    </div>
+    <div ref="editor" class="text" />
+    <div ref="toolbar" class="toolbar" />
   </div>
 </template>
 
 <script>
 import E from 'wangeditor';
-
+import { get, post } from '../api';
+import emotionsArr from '../assets/emotions.js';
 export default {
   name: 'Editorbar',
   data() {
     return {
       editor: null,
       info_: null,
+      emotionsContent: [],
+      emotionsContentWeibo: [],
     };
   },
   model: {
@@ -46,7 +47,25 @@ export default {
     },
   },
   mounted() {
-    this.seteditor();
+    get('/emotions').then(res => {
+        this.emotionsContent = res.data.map(el => {
+            let alt = el.value;
+            let src = el.icon;
+            return {
+                alt,
+                src
+            }
+        });
+        this.emotionsContentWeibo = emotionsArr.map(el => {
+            let alt = el.value;
+            let src = el.icon;
+            return {
+                alt,
+                src
+            }
+        });
+        this.seteditor();
+    });
   },
   methods: {
     seteditor() {
@@ -61,28 +80,22 @@ export default {
       this.editor.customConfig.uploadImgMaxSize = 2 * 1024 * 1024; // 将图片大小限制为 2M
       this.editor.customConfig.uploadImgMaxLength = 6; // 限制一次最多上传 3 张图片
       this.editor.customConfig.uploadImgTimeout = 3 * 60 * 1000; // 设置超时时间
-
-      // 配置菜单
-      this.editor.customConfig.menus = [
-        'head', // 标题
-        'bold', // 粗体
-        'fontSize', // 字号
-        'fontName', // 字体
-        'italic', // 斜体
-        'underline', // 下划线
-        'strikeThrough', // 删除线
-        'foreColor', // 文字颜色
-        'backColor', // 背景颜色
-        'link', // 插入链接
-        'list', // 列表
-        'justify', // 对齐方式
-        'quote', // 引用
-        'emoticon', // 表情
-        'image', // 插入图片
-        'video', // 插入视频
-        'code', // 插入代码
-        'undo', // 撤销
+      
+      // 配置表情
+      this.editor.customConfig.emotions = [
+          {
+            title: '默认',
+            type: 'image',
+            content: this.emotionsContent
+          },
+          {
+            title: '微博',
+            type: 'image',
+            content: this.emotionsContentWeibo
+          }
       ];
+      // 配置菜单
+      this.editor.customConfig.menus = ['emoticon'];
 
       this.editor.customConfig.uploadImgHooks = {
         fail: (xhr, editor, result) => {
@@ -113,16 +126,24 @@ export default {
 };
 </script>
 
-<style lang="css">
+<style lang="less">
 .editor {
   width: 80%;
   margin: 0 auto;
+  .w-e-text {
+      border: 1px solid blue;
+      overflow-y: unset;
+      img{
+          width: 20px;
+      }
+  };
+  .w-e-panel-container {
+      width: 100%!important;
+      margin-left: 0!important;
+      top: unset!important;
+      bottom: -256px!important;
+      left: unset!important;
+  }
 }
-.toolbar {
-  border: 1px solid #ccc;
-}
-.text {
-  border: 1px solid #ccc;
-  height: 500px;
-}
+
 </style>

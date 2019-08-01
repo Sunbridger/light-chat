@@ -1,7 +1,6 @@
 <template lang="html">
     <div class="">
         <editor
-
         v-model="result"></editor>
         <input type="button" name="name" value="submit" @click="submit">
     </div>

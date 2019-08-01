@@ -4,7 +4,8 @@ import Router from 'koa-router';
 import cors from 'koa2-cors';
 import { addUser } from './data';
 import fs from 'fs';
-import path from 'path';
+import path from 'path'; 
+import request from 'request';
 const app = new Koa();
 const router = new Router();
 const options = {
@@ -13,7 +14,14 @@ const options = {
         maxFileSize: 200*1024*1024	// 设置上传文件大小最大限制，默认2M
     }
 }
-
+function requestGet(url: string) {
+    return new Promise(function (resolve, reject) {
+      request(url, function(err: any, response: any, body: unknown) {
+        if (err) reject(err);
+        resolve(body);
+      });
+    });
+}
 app.use(koaBody(options));
 app.use(cors());
 app.use(router.routes());
@@ -44,6 +52,10 @@ router.post('/adduser', async (ctx: { request: { body: { name: any; age: any; };
     ctx.body = {
         url: 'xxxx'
     }
+}).get('/emotions', async (ctx: any) => {
+    await requestGet('https://api.weibo.com/2/emotions.json?source=1362404091').then(res => {
+    ctx.body = res
+    })
 })
 
 
