@@ -1,7 +1,10 @@
 <template>
-  <div class="home">
+  <div>
     <img alt="Vue logo" src="../assets/logo.png">
     <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+    <input type="text" v-model="name">
+    <input type="text" v-model="age">
+    <button @click='submit'>提交</button>
   </div>
 </template>
 
@@ -11,16 +14,32 @@ import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
 import { get, post } from '../api';
 
 export default Vue.extend({
-  name: 'home',
-  components: {
+    name: 'home',
+    data() {
+        return {
+            name: '',
+            age:''
+        }
+    },
+    components: {
     HelloWorld,
-  },
-  created() {
-      post('/user', {
-          id: 9
-      }).then(res => {
-          console.log(res, 'res')
-      });
-  },
+    },
+    created() {
+    
+    },
+    methods: {
+        submit() {
+            post('/user', {
+                name: this.name,
+                age: this.age
+            }).then(({ data }) => {
+                if (data.msg) {
+                    console.log('成功')
+                } else {
+                    console.log('失败')
+                }
+            })
+        }
+    }
 });
 </script>

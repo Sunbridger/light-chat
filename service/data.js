@@ -9,13 +9,13 @@ let query = function( sql, values ) {
     return new Promise(( resolve, reject ) => {
         pool.getConnection(function(err, connection) {
             if (err) {
-                resolve( err )
+                resolve(false)
             } else {
                 connection.query(sql, values, ( err, rows) => {
                     if ( err ) {
-                        reject( err )
+                        resolve(false)
                     } else {
-                        resolve( rows )
+                        resolve(rows)
                     }
                     connection.release()
                 })

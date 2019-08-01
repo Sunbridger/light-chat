@@ -6,16 +6,23 @@ const router = new Router();
 const Sql = require('./data');
 app.use(bodyParser()).use(router.routes()).use(router.allowedMethods());
 
-router.post('/user', async ctx => {
+router.post('/adduser', async ctx => {
+    const { name, age } = ctx.request.body;
     await Sql.addUser({
-        name: 'Sunbridger',
-        age: 23
+        name,
+        age
     }).then(res => {
-        console.log(res,' res');
+        if (res) {
+            ctx.body = {
+                msg: true
+            }
+        } else {
+            ctx.body = {
+                msg: false
+            }
+        }
     })
-    ctx.body = '插入成功'
-    console.log(11111)
-})
+});
 
 
 app.listen(3000, () => {
