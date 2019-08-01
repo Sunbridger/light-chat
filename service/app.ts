@@ -6,12 +6,12 @@ const router = new Router();
 const Sql = require('./data');
 app.use(bodyParser()).use(router.routes()).use(router.allowedMethods());
 
-router.post('/adduser', async ctx => {
+router.post('/adduser', async (ctx: { request: { body: { name: any; age: any; }; }; body: { msg: boolean; }; }) => {
     const { name, age } = ctx.request.body;
     await Sql.addUser({
         name,
         age
-    }).then(res => {
+    }).then((res: any) => {
         if (res) {
             ctx.body = {
                 msg: true
