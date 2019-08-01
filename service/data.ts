@@ -30,6 +30,10 @@ const addUser = (params: { name: any; age: any; }) => {
     return query(_sql);
 }
 
-module.exports = {
+// module.exports = {
+//     addUser
+// };
+
+export {
     addUser
-};
+}

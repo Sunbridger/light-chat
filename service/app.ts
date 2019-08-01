@@ -1,14 +1,16 @@
-const Koa = require('koa');
+import Koa from 'koa';
 const app = new Koa();
-const bodyParser = require('koa-bodyparser')
-const Router = require('koa-router');
+import bodyParser from 'koa-bodyparser';
+import Router from 'koa-router';
 const router = new Router();
-const Sql = require('./data');
+import {
+    addUser
+} from './data';
 app.use(bodyParser()).use(router.routes()).use(router.allowedMethods());
 
 router.post('/adduser', async (ctx: { request: { body: { name: any; age: any; }; }; body: { msg: boolean; }; }) => {
     const { name, age } = ctx.request.body;
-    await Sql.addUser({
+    await addUser({
         name,
         age
     }).then((res: any) => {
