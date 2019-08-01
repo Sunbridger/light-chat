@@ -1,12 +1,23 @@
 import Koa from 'koa';
-const app = new Koa();
-import bodyParser from 'koa-bodyparser';
+import koaBody from 'koa-body';
 import Router from 'koa-router';
+import cors from 'koa2-cors';
+import { addUser } from './data';
+import fs from 'fs';
+import path from 'path';
+const app = new Koa();
 const router = new Router();
-import {
-    addUser
-} from './data';
-app.use(bodyParser()).use(router.routes()).use(router.allowedMethods());
+const options = {
+    multipart: true,
+    formidable: {
+        maxFileSize: 200*1024*1024	// 设置上传文件大小最大限制，默认2M
+    }
+}
+
+app.use(koaBody(options));
+app.use(cors());
+app.use(router.routes());
+app.use(router.allowedMethods());
 
 router.post('/adduser', async (ctx: { request: { body: { name: any; age: any; }; }; body: { msg: boolean; }; }) => {
     const { name, age } = ctx.request.body;
@@ -24,7 +35,16 @@ router.post('/adduser', async (ctx: { request: { body: { name: any; age: any; };
             }
         }
     })
-});
+}).post('/addimg', async (ctx: any) => {
+    const file = ctx.request.files.imgfile;	// 获取上传文件 imgfile 为前端自定义
+    const reader = fs.createReadStream(file.path);	// 创建读流
+    let filePath = path.resolve(__dirname, 'upload/') + `/${file.name}`;
+    const upStream = fs.createWriteStream(filePath);
+    reader.pipe(upStream);
+    ctx.body = {
+        url: 'xxxx'
+    }
+})
 
 
 app.listen(3000, () => {
