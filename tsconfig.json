@@ -10,10 +10,7 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "baseUrl": ".",
-    "types": [
-      "webpack-env",
-      "jest"
-    ],
+    "types": [],
     "paths": {
       "@/*": [
         "src/*"
@@ -25,7 +22,7 @@
       "dom.iterable",
       "scripthost"
     ],
-    "noImplicitAny": false
+    "noImplicitAny": true
   },
   "include": [
     "./src/**/*",
