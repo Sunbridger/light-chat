@@ -35,11 +35,11 @@ export default {
                 byme: false,
                 msg
             });
-        })
+            this.autoBottom();
+        });
     },
     methods: {
         submit() {
-            console.log(this.content,'ccccc')
             if (!this.content) return;
             wsEmit('sendMsg', this.content, msg => {
                 this.shouldShowMsg.push({
@@ -66,7 +66,6 @@ export default {
         margin-bottom: 33px;
         .row-msg {
             overflow: hidden;
-            margin: 20px 0 10px 0;
             .fr {
                 float: right;
                 margin-right: 40px;
