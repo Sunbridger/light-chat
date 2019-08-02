@@ -1,66 +1,118 @@
 <template lang="html">
     <div>
-        <div>
-            <div class="top-msg" v-for="(msg, index) in hasSendMsg" :key="msg+index" v-html="msg"></div>
-            <div class="top-msg" v-for="(msg, index) in hasReceiveMsg" :key="msg+index" v-html="msg"></div>
+        <div class="content-top">
+            <div class="row-msg" v-for="(row, index) in shouldShowMsg" :key="row.msg+index">
+                <p class="top-msg" :class="{fr: row.byme, fl: !row.byme}">
+                    {{row.msg}}
+                    <el-avatar :class="{'el-avatar-fl': !row.byme, 'el-avatar-fr': row.byme}" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
+                </p>
+            </div>
         </div>
         <div class="box-chat">
-            <editor
-            v-model="result"></editor>
-            <el-button type="success" round @click="submit">发送</el-button>
+           <el-input
+                type="textarea"
+                :autosize="{ minRows: 1, maxRows: 4}"
+                v-model="content">
+            </el-input>
+            <el-button size="small" type="success" round @click="submit">发送</el-button>
         </div>
     </div>
 </template>
 
 <script>
-import Editor from 'component/Editor.vue';
 import { wsEmit, wsOn } from 'api';
 
 export default {
-  name: 'e',
-  data() {
-    return {
-      result: '',
-      hasSendMsg: [],
-      hasReceiveMsg: [],
-      input: ''
-    };
-  },
-  created() {
-      wsOn('newMsg' ,data => {
-          this.hasReceiveMsg.push(data);
-      })
-  },
-  methods: {
-    submit() {
-        if (!this.result) return;
-      wsEmit('sendMsg', this.result, fromServiceData => {
-          this.hasSendMsg.push(fromServiceData);
-          this.result = '';
-      });
+    data() {
+        return {
+            content: '',
+            shouldShowMsg: [],
+        };
     },
-  },
-  components: {
-    Editor,
-  },
+    created() {
+        wsOn('newMsg' ,msg => {
+            this.shouldShowMsg.push({
+                byme: false,
+                msg
+            });
+        })
+    },
+    methods: {
+        submit() {
+            console.log(this.content,'ccccc')
+            if (!this.content) return;
+            wsEmit('sendMsg', this.content, msg => {
+                this.shouldShowMsg.push({
+                    byme: true,
+                    msg
+                });
+                this.content = '';
+            });
+        },
+    },
 };
 </script>
 
 <style lang="less">
-    .box-chat {
-        position: relative;
-        .el-button {
-            position: absolute;
-            top: 5px;
-            right: 5px;
+    .content-top {
+        padding: 0 8px;
+        .row-msg {
+            overflow: hidden;
+            margin: 20px 0 10px 0;
+            .fr {
+                float: right;
+                margin-right: 40px;
+            }
+            .fl {
+                float: left;
+                margin-left: 40px;
+            }
+            .top-msg {
+                line-height: 1.5;
+                min-height: 25px;
+                display: inline-block;
+                padding: 2px 8px;
+                border-radius:5px;
+                background-color: rgba(126, 220, 130,.9);
+                white-space:normal; 
+                word-break:break-all;
+                letter-spacing: 1px;
+                position: relative;
+                .el-avatar--circle {
+                    position: absolute;
+                    width: 30px;
+                    height: 30px;
+                    top: 0;
+                }
+                .el-avatar-fl {
+                    left: -40px;
+                }
+                .el-avatar-fr {
+                    right: -40px;
+                }
+                img {
+                    width: 20px;
+                    vertical-align: -3px;
+                    margin-left: 3px;
+                }
+            }
         }
     }
-    .top-msg {
-        padding: 1px;
-        img {
-            width: 20px;
-            vertical-align: -3px;
-            margin-left: 3px;
+    .box-chat {
+        display: flex;
+        align-items: flex-end;
+        .el-textarea__inner {
+            resize: none;
+            padding: 5px!important;
+            &:focus {
+               border-color: #44b549!important;
+            }
+        }
+        .el-button {
+            height: 33px!important;
+            background-color: #3ca940 !important;
+            border-radius: 3px!important;
+            border: none;
         }
     }
 </style>
