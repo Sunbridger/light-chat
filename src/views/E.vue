@@ -47,8 +47,15 @@ export default {
                     msg
                 });
                 this.content = '';
+                this.autoBottom();
             });
         },
+        autoBottom() {
+            window.scrollTo({ 
+                top: window.screen.height + 9999, 
+                behavior: "smooth" 
+            });
+        }
     },
 };
 </script>
@@ -56,6 +63,7 @@ export default {
 <style lang="less">
     .content-top {
         padding: 0 8px;
+        margin-bottom: 33px;
         .row-msg {
             overflow: hidden;
             margin: 20px 0 10px 0;
@@ -101,6 +109,9 @@ export default {
     .box-chat {
         display: flex;
         align-items: flex-end;
+        width: 100%;
+        position: fixed;
+        bottom: 0;
         .el-textarea__inner {
             resize: none;
             padding: 5px!important;
