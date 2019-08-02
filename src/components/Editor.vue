@@ -7,8 +7,9 @@
 
 <script>
 import E from 'wangeditor';
-import { get, post } from '../api';
-import emotionsArr from '../assets/emotions.js';
+import { get, post } from 'api';
+
+
 export default {
   name: 'Editorbar',
   data() {
@@ -16,7 +17,6 @@ export default {
       editor: null,
       info_: null,
       emotionsContent: [],
-      emotionsContentWeibo: [],
     };
   },
   model: {
@@ -27,20 +27,9 @@ export default {
     value: {
       type: String,
       default: '',
-    },
-    isClear: {
-      type: Boolean,
-      default: false,
-    },
+    }
   },
   watch: {
-    isClear(val) {
-      // 触发清除文本域内容
-      if (val) {
-        this.editor.txt.clear();
-        this.info_ = null;
-      }
-    },
     value(val) {
       // 使用 v-model 时，设置初始值
       this.editor.txt.html(val);
@@ -49,14 +38,6 @@ export default {
   mounted() {
     get('/emotions').then(res => {
         this.emotionsContent = res.data.map(el => {
-            let alt = el.value;
-            let src = el.icon;
-            return {
-                alt,
-                src
-            }
-        });
-        this.emotionsContentWeibo = emotionsArr.map(el => {
             let alt = el.value;
             let src = el.icon;
             return {
@@ -87,11 +68,6 @@ export default {
             title: '默认',
             type: 'image',
             content: this.emotionsContent
-          },
-          {
-            title: '微博',
-            type: 'image',
-            content: this.emotionsContentWeibo
           }
       ];
       // 配置菜单

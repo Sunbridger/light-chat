@@ -19,6 +19,8 @@ const data_1 = require("./data");
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const request_1 = __importDefault(require("request"));
+const http_1 = __importDefault(require("http"));
+const socket_io_1 = __importDefault(require("socket.io"));
 const app = new koa_1.default();
 const router = new koa_router_1.default();
 const options = {
@@ -38,8 +40,6 @@ function requestGet(url) {
 }
 app.use(koa_body_1.default(options));
 app.use(koa2_cors_1.default());
-app.use(router.routes());
-app.use(router.allowedMethods());
 router.post('/adduser', (ctx) => __awaiter(this, void 0, void 0, function* () {
     const { name, age } = ctx.request.body;
     yield data_1.addUser({
@@ -71,6 +71,19 @@ router.post('/adduser', (ctx) => __awaiter(this, void 0, void 0, function* () {
         ctx.body = res;
     });
 }));
-app.listen(3000, () => {
+app.use(router.routes());
+app.use(router.allowedMethods());
+const server = http_1.default.createServer(app.callback());
+const io = socket_io_1.default(server);
+//监听socket连接
+io.on('connection', (socket) => {
+    socket.on('sendMsg', (msg, fn) => {
+        fn(msg);
+        socket.broadcast.emit('newMsg', msg);
+    });
+    socket.on('disconnect', (msg) => {
+    });
+});
+server.listen(3000, () => {
     console.log(3000);
 });

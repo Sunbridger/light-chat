@@ -24,9 +24,10 @@ module.exports = {
       config.mode = 'development';
     }
     config.resolve.alias = {
-      component: resolve('./src/components'),
+      'component': resolve('./src/components'),
       '@': resolve('./src'),
-      view: resolve('./src/views'),
+      'view': resolve('./src/views'),
+      'api': resolve('./src/api'),
     };
   },
 };

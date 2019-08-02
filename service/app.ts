@@ -6,8 +6,13 @@ import { addUser } from './data';
 import fs from 'fs';
 import path from 'path'; 
 import request from 'request';
+import http from 'http';
+import socket from 'socket.io';
+
 const app = new Koa();
 const router = new Router();
+
+
 const options = {
     multipart: true,
     formidable: {
@@ -24,8 +29,6 @@ function requestGet(url: string) {
 }
 app.use(koaBody(options));
 app.use(cors());
-app.use(router.routes());
-app.use(router.allowedMethods());
 
 router.post('/adduser', async (ctx: { request: { body: { name: any; age: any; }; }; body: { msg: boolean; }; }) => {
     const { name, age } = ctx.request.body;
@@ -54,11 +57,28 @@ router.post('/adduser', async (ctx: { request: { body: { name: any; age: any; };
     }
 }).get('/emotions', async (ctx: any) => {
     await requestGet('https://api.weibo.com/2/emotions.json?source=1362404091').then(res => {
-    ctx.body = res
+        ctx.body = res
     })
 })
 
+app.use(router.routes());
+app.use(router.allowedMethods());
 
-app.listen(3000, () => {
-    console.log(3000)
+
+
+
+const server = http.createServer(app.callback());
+const io = socket(server);
+//监听socket连接
+io.on('connection', (socket: any) => {
+    socket.on('sendMsg', (msg: string|undefined, fn:any) => {
+        fn(msg)
+        socket.broadcast.emit('newMsg', msg);
+    })
+    socket.on('disconnect', (msg: any) => {
+        
+    })
+})
+server.listen(3000, () => {
+    console.log(3000);
 });
