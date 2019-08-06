@@ -41,12 +41,19 @@ const router = new Router({
         beforeEnter: (to, from, next) => {
             if (window.localStorage.uid && to.params.uid) {
                 next()
+                setTimeout(() => {
+                    window.scrollTo({ 
+                        top: window.screen.height + 9999, 
+                        behavior: "smooth" 
+                    });
+                });
             } else {
                 next({
                     name: 'login'
                 })
             }
-        }
+        },
+
     }
   ],
 });
