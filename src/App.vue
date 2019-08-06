@@ -54,8 +54,7 @@ export default {
                     this.saveStroage({
                         [key]: ++num
                     });
-                    this.$router.go(0);
-                    location.reload() 
+                    location.reload(); 
                 } else {
                     this.getShouldShowMsg({
                         uid: sender.uid
