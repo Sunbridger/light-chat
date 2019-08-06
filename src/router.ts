@@ -46,7 +46,7 @@ const router = new Router({
                         top: window.screen.height + 9999, 
                         behavior: "smooth" 
                     });
-                });
+                }, 500);
             } else {
                 next({
                     name: 'login'

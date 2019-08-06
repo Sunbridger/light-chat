@@ -17,6 +17,7 @@ export default new Vuex.Store({
         changeShouldShowMsg(state, data: any) {
             if (Array.isArray(data)) {
                 state.shouldShowMsg = Object.assign([], data);
+                console.log(state.shouldShowMsg, 'state.shouldShowMsg')
             } else {
                 state.shouldShowMsg.push(data);
             }

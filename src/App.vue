@@ -7,6 +7,9 @@
 <script>
 
 import { wsEmit, wsOn, post } from 'api';
+
+import { mapActions } from 'vuex';
+
 const friends = [
     {
         name: 'Sunbridger',
@@ -48,14 +51,22 @@ export default {
                         duration: 1500
                     });
                 } else {
-                    
+                    this.getShouldShowMsg({
+                        uid: sender.uid
+                    });
+                    window.scrollTo({ 
+                        top: window.screen.height + 9999, 
+                        behavior: "smooth" 
+                    });
                 }
             });
 
         } 
     },
     methods: {
-
+        ...mapActions([
+            'getShouldShowMsg'
+        ])
     }
 };
 </script>

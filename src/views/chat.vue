@@ -81,8 +81,6 @@ export default {
                 loading: true,
             });
             this.autoBottom();
-            // 发送私信给别人
-            wsEmit('send-private-chat', sender, this.friend.uid);
             post('/savemsg', {
                 from: this.myUid,
                 to: this.friend.uid,
@@ -90,6 +88,8 @@ export default {
             }).then(({data}) => {
                 if (data) {
                     this.getmsgoto();
+                    // 发送私信给别人
+                    wsEmit('send-private-chat', sender, this.friend.uid);
                 }
             })
         },
