@@ -49,11 +49,13 @@ export default {
                         type: 'success',
                         duration: 1500
                     });
-                    const key = 'num' + sender.uid;
+                    const key = uid + '-' + sender.uid;
                     let num = this.getStroage(key) || 0;
                     this.saveStroage({
                         [key]: ++num
-                    })
+                    });
+                    this.$router.go(0);
+                    location.reload() 
                 } else {
                     this.getShouldShowMsg({
                         uid: sender.uid

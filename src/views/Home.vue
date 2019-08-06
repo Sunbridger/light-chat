@@ -75,12 +75,14 @@ export default {
             'getFriends'
         ]),
         getNum(uid) {
-            const key = 'num' + uid;
+            const key = this.uid + '-' + uid;
             let num = this.getStroage(key);
             return num;
         },
         exit() {
-            window.localStorage.clear();
+            ['avatar', 'name', 'uid'].forEach(el => {
+                window.localStorage.removeItem(el);
+            })
             wsEmit('offline', this.uid)
             this.$router.push({
                 name: 'login'

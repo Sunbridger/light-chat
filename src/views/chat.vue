@@ -59,7 +59,7 @@ export default {
             'changeShouldShowMsg'
         ]),
         clearNum() {
-            const key = 'num' + this.friend.uid;
+            const key = this.myUid + '-' + this.friend.uid;
             window.localStorage.removeItem(key);
         },
         getmsgoto() {
