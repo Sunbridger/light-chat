@@ -20,33 +20,6 @@
 
 <script>
 import { wsEmit, wsOn } from 'api';
-const friends = [
-    {
-        name: 'Sunbridger',
-        uid: 19,
-        avatar: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
-    },
-    {
-        name: '曹奥',
-        uid: 127,
-        avatar: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
-    },
-    {
-        name: '猴子啊',
-        uid: 22,
-        avatar: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
-    },
-    {
-        name: '万知啊',
-        uid: 981,
-        avatar: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
-    },
-    {
-        name: '刘阿斯',
-        uid: 2321,
-        avatar: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
-    },
-];
 const item = [
     {
         value: '我的好友',
@@ -72,6 +45,7 @@ export default {
         };
     },
     created() {
+        console.log(this.$store.state, 'asdasd')
         this.friends = Object.assign([], friends);
     },
     methods: {

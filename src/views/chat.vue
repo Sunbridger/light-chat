@@ -59,7 +59,8 @@ export default {
             if (!this.content) return;
             const sender = {
                 uid: this.myUid,
-                msg: this.content
+                msg: this.content,
+                name: this.friend.name
             };
             // 发送私信给别人
             wsEmit('send-private-chat', sender, this.friend.uid);

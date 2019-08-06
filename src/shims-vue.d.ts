@@ -3,4 +3,4 @@ declare module '*.vue' {
 
   export default Vue;
 }
-declare module '*.js' {}
+declare module '*.js' ;
