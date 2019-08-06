@@ -22,8 +22,8 @@
 import { wsEmit, wsOn } from 'api';
 const friends = [
     {
-        name: '小王八',
-        uid: 21,
+        name: 'Sunbridger',
+        uid: 19,
         avatar: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
     },
     {

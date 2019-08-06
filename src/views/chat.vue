@@ -5,13 +5,13 @@
             {{friend.name}}
         </div>
         <div class="content-top">
-            <div class="row-msg" v-for="(row, index) in shouldShowMsg" :key="row.msg+index">
+            <div class="row-msg" v-for="row in shouldShowMsg" :key="row.id">
                 <p class="top-msg" 
-                    :class="{fr: row.byme, fl: !row.byme}">
+                    :class="{fr: byme(row.fromuid), fl: !byme(row.fromuid)}">
                     {{row.msg}}
                     <el-avatar 
-                        :class="{'el-avatar-fl': !row.byme, 'el-avatar-fr': row.byme}" 
-                        :src="row.byme?myAvatar:friend.avatar">
+                        :class="{'el-avatar-fl': !byme(row.fromuid), 'el-avatar-fr': byme(row.fromuid)}" 
+                        :src="byme(row.fromuid)?myAvatar:friend.avatar">
                     </el-avatar>
                 </p>
             </div>
@@ -28,13 +28,13 @@
 </template>
 
 <script>
-import { wsEmit, wsOn } from 'api';
+import { wsEmit, wsOn, post } from 'api';
 export default {
     name: 'chat',
     data() {
         return {
             content: '',
-            shouldShowMsg: JSON.parse(this.getStroage(this.$route.params.uid) || '[]'),
+            shouldShowMsg: [],
             friend: this.$route.params,
             myAvatar: this.getStroage('avatar'),
             myName: this.getStroage('name'),
@@ -42,29 +42,34 @@ export default {
         };
     },
     created() {
-        console.log(this.shouldShowMsg, 'shouldShowMsg')
-        wsOn('newMsg' ,msg => {
-            this.shouldShowMsg.push({
-                byme: false,
-                msg
-            });
-            this.autoBottom();
+        post('/getmsgoto', {
+            uid1: this.friend.uid, 
+            uid2: this.myUid
+        }).then(({data}) => {
+            if (data) {
+                this.shouldShowMsg = data;
+            }
         });
     },
     methods: {
+        byme(uid) {
+            return  uid == this.myUid
+        },
         submit() {
             if (!this.content) return;
             const sender = {
-                name: this.myName,
-                avatar: this.myAvatar,
                 uid: this.myUid,
                 msg: this.content
             };
+            // 发送私信给别人
             wsEmit('send-private-chat', sender, this.friend.uid);
-            this.shouldShowMsg.push({
-                byme: true,
+            post('/savemsg', {
+                from: this.myUid,
+                to: this.friend.uid,
                 msg: this.content
-            });
+            }).then(({data}) => {
+                alert('发送成功');
+            })
             this.content = '';
             this.autoBottom();
         },

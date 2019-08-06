@@ -2,7 +2,7 @@ import Koa from 'koa';
 import koaBody from 'koa-body';
 import Router from 'koa-router';
 import cors from 'koa2-cors';
-import { register, login, userInfo } from './data';
+import { register, login, userInfo, savemsg, getmsgoto } from './data';
 import fs from 'fs';
 import path from 'path'; 
 import request from 'request';
@@ -69,6 +69,14 @@ router.post('/addimg', async (ctx: any) => {
     let { uid } = ctx.request.body;
     const data = await userInfo(uid);
     ctx.body = data;
+}).post('/savemsg', async (ctx: any) => {
+    let { from, to, msg } = ctx.request.body;
+    const flag = await savemsg({ from, to, msg });
+    ctx.body = !!flag;
+}).post('/getmsgoto', async (ctx: any) => {
+    let { uid1, uid2 } = ctx.request.body;
+    const data = await getmsgoto({ uid1, uid2 });
+    ctx.body = data;
 })
 
 app.use(router.routes());
@@ -83,11 +91,10 @@ const io = socket(server);
 io.on('connection', (socket: any) => {
     socket.on('online', (user: any) => {
         allUserOnline[user] = socket;
-        console.log(allUserOnline.length)
     });
     
-    socket.on('send-private-chat', (sender: any, receiver: number) => {
-        const nowSocket = allUserOnline[receiver];
+    socket.on('send-private-chat', (sender: any, receiveruid: number) => {
+        const nowSocket = allUserOnline[receiveruid];
         if (nowSocket) {
             nowSocket.emit('receive-private-chat',sender);
         }

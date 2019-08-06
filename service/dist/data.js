@@ -13,7 +13,8 @@ const pool = mysql.createPool({
     host: 'localhost',
     user: 'root',
     password: '123456',
-    database: 'test'
+    database: 'test',
+    charset: 'utf8mb4'
 });
 let query = function (sql, values) {
     return new Promise((resolve, reject) => {
@@ -72,3 +73,15 @@ const userInfo = (uid) => {
     // TODO: 通过uid查询好友 等信息
 };
 exports.userInfo = userInfo;
+const savemsg = (params) => {
+    const { from, to, msg } = params;
+    const _sql = `insert into chatmsg(fromuid, touid, msg) value(${from},${to},'${msg}')`;
+    return query(_sql);
+};
+exports.savemsg = savemsg;
+const getmsgoto = (params) => {
+    const { uid1, uid2 } = params;
+    const _sql = `select * from chatmsg where (fromuid=${uid1} and touid=${uid2}) or (fromuid=${uid2} and touid=${uid1}) order by time asc`;
+    return query(_sql);
+};
+exports.getmsgoto = getmsgoto;

@@ -83,6 +83,14 @@ router.post('/addimg', (ctx) => __awaiter(this, void 0, void 0, function* () {
     let { uid } = ctx.request.body;
     const data = yield data_1.userInfo(uid);
     ctx.body = data;
+})).post('/savemsg', (ctx) => __awaiter(this, void 0, void 0, function* () {
+    let { from, to, msg } = ctx.request.body;
+    const flag = yield data_1.savemsg({ from, to, msg });
+    ctx.body = !!flag;
+})).post('/getmsgoto', (ctx) => __awaiter(this, void 0, void 0, function* () {
+    let { uid1, uid2 } = ctx.request.body;
+    const data = yield data_1.getmsgoto({ uid1, uid2 });
+    ctx.body = data;
 }));
 app.use(router.routes());
 app.use(router.allowedMethods());
@@ -93,10 +101,9 @@ const io = socket_io_1.default(server);
 io.on('connection', (socket) => {
     socket.on('online', (user) => {
         allUserOnline[user] = socket;
-        console.log(allUserOnline.length);
     });
-    socket.on('send-private-chat', (sender, receiver) => {
-        const nowSocket = allUserOnline[receiver];
+    socket.on('send-private-chat', (sender, receiveruid) => {
+        const nowSocket = allUserOnline[receiveruid];
         if (nowSocket) {
             nowSocket.emit('receive-private-chat', sender);
         }

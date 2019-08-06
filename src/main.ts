@@ -6,6 +6,7 @@ import './plugins/element';
 import Global from '../global.js';
 Vue.config.productionTip = false;
 Vue.prototype.service = Global;
+
 Vue.prototype.saveStroage = (params:any = {}) => {
     for (let key in params) {
         window.localStorage[key] = params[key]
