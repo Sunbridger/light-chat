@@ -8,6 +8,7 @@
             <div class="row-msg" v-for="row in shouldShowMsg" :key="row.id">
                 <p class="top-msg" 
                     :class="{fr: byme(row.fromuid), fl: !byme(row.fromuid)}">
+                    <i v-if="row.loading&&byme(row.fromuid)" class="el-icon-loading"></i>
                     {{row.msg}}
                     <el-avatar 
                         :class="{'el-avatar-fl': !byme(row.fromuid), 'el-avatar-fr': byme(row.fromuid)}" 
@@ -42,37 +43,49 @@ export default {
         };
     },
     created() {
-        post('/getmsgoto', {
-            uid1: this.friend.uid, 
-            uid2: this.myUid
-        }).then(({data}) => {
-            if (data) {
-                this.shouldShowMsg = data;
-            }
-        });
+        this.getmsgoto();
     },
     methods: {
+        getmsgoto() {
+            post('/getmsgoto', {
+                uid1: this.friend.uid, 
+                uid2: this.myUid
+            }).then(({data}) => {
+                if (data) {
+                    this.shouldShowMsg = data;
+                }
+            });
+        },
         byme(uid) {
             return  uid == this.myUid
         },
         submit() {
             if (!this.content) return;
+            const ct = this.content;
+            this.content = '';
             const sender = {
                 uid: this.myUid,
-                msg: this.content,
+                msg: ct,
                 name: this.friend.name
             };
+            this.shouldShowMsg.push({
+                fromuid: this.myUid,
+                avatar: this.avatar,
+                msg: ct,
+                loading: true,
+            });
+            this.autoBottom();
             // 发送私信给别人
             wsEmit('send-private-chat', sender, this.friend.uid);
             post('/savemsg', {
                 from: this.myUid,
                 to: this.friend.uid,
-                msg: this.content
+                msg: ct
             }).then(({data}) => {
-                alert('发送成功');
+                if (data) {
+                    this.getmsgoto();
+                }
             })
-            this.content = '';
-            this.autoBottom();
         },
         autoBottom() {
             window.scrollTo({ 
@@ -117,6 +130,11 @@ export default {
             .fr {
                 float: right;
                 margin-right: 40px;
+                .el-icon-loading {
+                    position: absolute;
+                    left: -23px;
+                    top: 7px;
+                }
             }
             .fl {
                 float: left;
@@ -125,6 +143,7 @@ export default {
             .top-msg {
                 line-height: 1.5;
                 min-height: 25px;
+                max-width: 70%;
                 display: inline-block;
                 padding: 2px 8px;
                 border-radius:5px;

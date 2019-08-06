@@ -39,7 +39,6 @@ const router = new Router({
         name:'chat',
         component: Chat,
         beforeEnter: (to, from, next) => {
-            console.log(to,from)
             if (window.localStorage.uid && to.params.uid) {
                 next()
             } else {

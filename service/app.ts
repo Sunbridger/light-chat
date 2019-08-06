@@ -75,7 +75,6 @@ router.post('/addimg', async (ctx: any) => {
     ctx.body = !!flag;
 }).post('/getmsgoto', async (ctx: any) => {
     let { uid1, uid2 } = ctx.request.body;
-    console.log(uid1, uid2, '::::')
     const data = await getmsgoto({ uid1, uid2 });
     ctx.body = data;
 }).post('/getuser', async (ctx: any) => {

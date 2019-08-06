@@ -11,7 +11,8 @@ import {
     Radio, 
     Upload, 
     Loading,
-    Message
+    Message,
+    Badge
 } from 'element-ui'
 
 Vue.use(Button);
@@ -24,5 +25,6 @@ Vue.use(FormItem);
 Vue.use(RadioGroup);
 Vue.use(Radio);
 Vue.use(Upload);
+Vue.use(Badge);
 Vue.prototype.$message = Message;
 Vue.use(Loading.directive);

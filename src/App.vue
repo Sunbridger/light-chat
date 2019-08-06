@@ -7,7 +7,6 @@
 <script>
 
 import { wsEmit, wsOn, post } from 'api';
-
 const friends = [
     {
         name: 'Sunbridger',
@@ -37,7 +36,6 @@ const friends = [
 ];
 export default {
     created() {
-        
         const uid = this.getStroage('uid');
         if (uid) {
             wsEmit('online', uid);
@@ -47,7 +45,7 @@ export default {
                     this.$message({
                         message: `${sender.name}发来一条新消息`,
                         type: 'success',
-                        duration: 1000
+                        duration: 1500
                     });
                 }
             });

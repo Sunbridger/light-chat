@@ -1,8 +1,10 @@
 <template>
     <div>
-        <div v-if="name === 'friends'">
+        <div v-if="name === 'friends'" class="content-box">
             <div v-for="friend in friends" :key="friend.uid" class="flex" @click="getChat(friend)">
-                <el-avatar shape="square" :size="50" :src="friend.avatar"></el-avatar>
+                <el-badge :value="200" :max="99" class="item">    
+                    <el-avatar shape="square" :size="50" :src="friend.avatar"></el-avatar>
+                </el-badge>
                 <p class="flex1">{{friend.name}}</p>
             </div>
         </div>
@@ -77,6 +79,8 @@ export default {
 </script>
 
 <style lang="less">
+.content-box {
+    padding: 15px;
     .flex {
         display: flex;
         margin-bottom: 20px;
@@ -87,22 +91,23 @@ export default {
             border-bottom: 1px solid #ccc;
         }
     }
-    .nav-bottom {
-        position: fixed;
-        bottom: 0;
-        width: 100%;
-        background-color: #e2dfdf;
-        display: flex;
-        justify-content: space-around;
-        .nav-p {
-            flex: 1;
-            text-align: center;
-            margin: 0;
-            height: 38px;
-            line-height: 38px;
-        }
-        .active {
-            background-color: aquamarine;
-        }
+}
+.nav-bottom {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #e2dfdf;
+    display: flex;
+    justify-content: space-around;
+    .nav-p {
+        flex: 1;
+        text-align: center;
+        margin: 0;
+        height: 38px;
+        line-height: 38px;
     }
+    .active {
+        background-color: aquamarine;
+    }
+}
 </style>
