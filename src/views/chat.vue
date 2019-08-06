@@ -48,7 +48,8 @@ export default {
         }
     },
     created() {
-        this.getmsgoto()
+        this.getmsgoto();
+        this.clearNum();
     },
     methods: {
         ...mapActions([
@@ -57,6 +58,10 @@ export default {
         ...mapMutations([
             'changeShouldShowMsg'
         ]),
+        clearNum() {
+            const key = 'num' + this.friend.uid;
+            window.localStorage.removeItem(key);
+        },
         getmsgoto() {
             this.getShouldShowMsg({
                 uid: this.friend.uid //他人的uid写入即可
@@ -67,12 +72,13 @@ export default {
         },
         submit() {
             if (!this.content) return;
+            console.log(this.myUid,'asdasd')
             const ct = this.content;
             this.content = '';
             const sender = {
                 uid: this.myUid,
                 msg: ct,
-                name: this.friend.name
+                name: this.myName
             };
             this.changeShouldShowMsg({
                 fromuid: this.myUid,
@@ -112,16 +118,17 @@ export default {
 <style lang="less">
     .fix-top {
         width: 100%;
-        height: 28px;
+        height: 38px;
         position: fixed;
         top: 0;
         z-index: 111;
         background-color: rgb(226, 223, 223);
         text-align: center;
-        line-height: 28px;
+        line-height: 38px;
         .el-icon-arrow-left {
             position: absolute;
             left: 2px;
+            top: 5px;
             &::before {
                 font-size: 28px;
             }

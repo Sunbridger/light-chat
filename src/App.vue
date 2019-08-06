@@ -41,7 +41,6 @@ export default {
     created() {
         const uid = this.getStroage('uid');
         if (uid) {
-            wsEmit('online', uid);
             // 监听给我发私信的事件...
             wsOn('receive-private-chat' ,(sender) => {
                 if (this.$route.name !== 'chat') {
@@ -50,6 +49,11 @@ export default {
                         type: 'success',
                         duration: 1500
                     });
+                    const key = 'num' + sender.uid;
+                    let num = this.getStroage(key) || 0;
+                    this.saveStroage({
+                        [key]: ++num
+                    })
                 } else {
                     this.getShouldShowMsg({
                         uid: sender.uid
