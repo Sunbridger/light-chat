@@ -30,30 +30,36 @@
 
 <script>
 import { wsEmit, wsOn, post } from 'api';
+import { mapActions, mapMutations } from 'vuex';
 export default {
     name: 'chat',
     data() {
         return {
             content: '',
-            shouldShowMsg: [],
             friend: this.$route.params,
             myAvatar: this.getStroage('avatar'),
             myName: this.getStroage('name'),
             myUid: this.getStroage('uid')
         };
     },
+    computed: {
+        shouldShowMsg() {
+            return this.$store.state.shouldShowMsg
+        }
+    },
     created() {
-        this.getmsgoto();
+        this.getmsgoto()
     },
     methods: {
+        ...mapActions([
+            'getShouldShowMsg'
+        ]),
+        ...mapMutations([
+            'changeShouldShowMsg'
+        ]),
         getmsgoto() {
-            post('/getmsgoto', {
-                uid1: this.friend.uid, 
-                uid2: this.myUid
-            }).then(({data}) => {
-                if (data) {
-                    this.shouldShowMsg = data;
-                }
+            this.getShouldShowMsg({
+                uid: this.friend.uid //他人的uid写入即可
             });
         },
         byme(uid) {
@@ -68,7 +74,7 @@ export default {
                 msg: ct,
                 name: this.friend.name
             };
-            this.shouldShowMsg.push({
+            this.changeShouldShowMsg({
                 fromuid: this.myUid,
                 avatar: this.avatar,
                 msg: ct,
