@@ -2,7 +2,7 @@ import Koa from 'koa';
 import koaBody from 'koa-body';
 import Router from 'koa-router';
 import cors from 'koa2-cors';
-import { register, login, userInfo, savemsg, getmsgoto } from './data';
+import { register, login, userInfo, savemsg, getmsgoto, getuser } from './data';
 import fs from 'fs';
 import path from 'path'; 
 import request from 'request';
@@ -75,7 +75,12 @@ router.post('/addimg', async (ctx: any) => {
     ctx.body = !!flag;
 }).post('/getmsgoto', async (ctx: any) => {
     let { uid1, uid2 } = ctx.request.body;
+    console.log(uid1, uid2, '::::')
     const data = await getmsgoto({ uid1, uid2 });
+    ctx.body = data;
+}).post('/getuser', async (ctx: any) => {
+    let { uid } = ctx.request.body;
+    const data = await getuser({ uid });
     ctx.body = data;
 })
 

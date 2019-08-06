@@ -26,6 +26,7 @@ let query = function (sql, values) {
                 connection.query(sql, values, (err, rows) => {
                     if (err) {
                         resolve(false);
+                        console.log(err, '1 err');
                     }
                     else {
                         resolve(rows);
@@ -42,7 +43,7 @@ const register = (params) => __awaiter(this, void 0, void 0, function* () {
     if (exis[0]) {
         return false; // 用户名已存在
     }
-    let _sql = `insert into user(name, password, avatar, time) value('${name}','${password}', '${avatar}', '${new Date()}')`;
+    let _sql = `insert into user(name, password, avatar) value('${name}','${password}', '${avatar}')`;
     return query(_sql);
 });
 exports.register = register;
@@ -85,3 +86,9 @@ const getmsgoto = (params) => {
     return query(_sql);
 };
 exports.getmsgoto = getmsgoto;
+const getuser = (params) => {
+    const { uid } = params;
+    const _sql = `select * from user where uid!=${uid} order by time asc`;
+    return query(_sql);
+};
+exports.getuser = getuser;

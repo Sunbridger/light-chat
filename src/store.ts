@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { post } from 'api/index.js';
+import { post, get } from 'api/index.js';
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -8,14 +8,15 @@ export default new Vuex.Store({
         friends: []
     },
     mutations: {
-        changeFriends(state, payload) {
-            Object.assign(state.friends, payload)
+        changeFriends(state, data) {
+            state.friends = Object.assign([], data);
         }
     },
     actions: {
         async getFriends(store) {
-            post()
-            store.commit('changeFriends',)
+            post('/getuser', {uid: window.localStorage.uid}).then((res: any) => {
+                store.commit('changeFriends', res.data);
+            })
         }
     },
 });

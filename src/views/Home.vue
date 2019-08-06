@@ -20,6 +20,7 @@
 
 <script>
 import { wsEmit, wsOn } from 'api';
+import { mapActions } from 'vuex';
 const item = [
     {
         value: '我的好友',
@@ -40,15 +41,21 @@ export default {
     data() {
         return {
             item: Object.assign([], item),
-            name: 'friends',
-            friends: []
+            name: 'friends'
         };
     },
+    computed: {
+        friends() {
+            return this.$store.state.friends;
+        }
+    },
     created() {
-        console.log(this.$store.state, 'asdasd')
-        this.friends = Object.assign([], friends);
+        this.getFriends();
     },
     methods: {
+        ...mapActions([
+            'getFriends'
+        ]),
         tabSelect(index, name) {
             this.item.forEach((el, ind) => {
                 if (ind === index) {

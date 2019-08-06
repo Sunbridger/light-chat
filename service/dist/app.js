@@ -89,7 +89,12 @@ router.post('/addimg', (ctx) => __awaiter(this, void 0, void 0, function* () {
     ctx.body = !!flag;
 })).post('/getmsgoto', (ctx) => __awaiter(this, void 0, void 0, function* () {
     let { uid1, uid2 } = ctx.request.body;
+    console.log(uid1, uid2, '::::');
     const data = yield data_1.getmsgoto({ uid1, uid2 });
+    ctx.body = data;
+})).post('/getuser', (ctx) => __awaiter(this, void 0, void 0, function* () {
+    let { uid } = ctx.request.body;
+    const data = yield data_1.getuser({ uid });
     ctx.body = data;
 }));
 app.use(router.routes());

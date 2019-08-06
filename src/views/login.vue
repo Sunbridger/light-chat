@@ -45,7 +45,7 @@ export default {
                         const { uid, avatar,name } = data;
                         this.saveStroage({ uid, avatar, name });
                         this.$router.push({
-                            name: 'chat',
+                            name: 'home',
                             // params: 'ok' TODO:利用参数 保证uid的传递？
                         });
                     } else {

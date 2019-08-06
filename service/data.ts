@@ -15,6 +15,7 @@ let query = function( sql: string, values?: any ) {
                 connection.query(sql, values, ( err, rows) => {
                     if ( err ) {
                         resolve(false)
+                        console.log(err, '1 err')
                     } else {
                         resolve(rows)
                     }
@@ -30,7 +31,7 @@ const register = async (params: { name: string; password: any; avatar: string })
     if (exis[0]) {
         return false; // 用户名已存在
     }
-    let _sql = `insert into user(name, password, avatar, time) value('${name}','${password}', '${avatar}', '${new Date()}')`;
+    let _sql = `insert into user(name, password, avatar) value('${name}','${password}', '${avatar}')`;
     return query(_sql);
 };
 const queryNameReturnPwd = (name: string) => {
@@ -68,11 +69,16 @@ const getmsgoto = (params: {uid1: number, uid2: number}) => {
     const _sql = `select * from chatmsg where (fromuid=${uid1} and touid=${uid2}) or (fromuid=${uid2} and touid=${uid1}) order by time asc`;
     return query(_sql);
 };
-
+const getuser = (params: {uid: number}) => {
+    const { uid } = params;
+    const _sql = `select * from user where uid!=${uid} order by time asc`;
+    return query(_sql);
+}
 export {
     register,
     login,
     userInfo,
     savemsg,
-    getmsgoto
+    getmsgoto,
+    getuser
 }
