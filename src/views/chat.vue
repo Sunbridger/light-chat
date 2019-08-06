@@ -1,10 +1,18 @@
-<template lang="html">
+<template>
     <div>
+        <div class="fix-top">
+            <i class="el-icon-arrow-left" @click="goBack"></i>
+            {{friend.name}}
+        </div>
         <div class="content-top">
             <div class="row-msg" v-for="(row, index) in shouldShowMsg" :key="row.msg+index">
-                <p class="top-msg" :class="{fr: row.byme, fl: !row.byme}">
+                <p class="top-msg" 
+                    :class="{fr: row.byme, fl: !row.byme}">
                     {{row.msg}}
-                    <el-avatar :class="{'el-avatar-fl': !row.byme, 'el-avatar-fr': row.byme}" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
+                    <el-avatar 
+                        :class="{'el-avatar-fl': !row.byme, 'el-avatar-fr': row.byme}" 
+                        :src="row.byme?myAvatar:friend.avatar">
+                    </el-avatar>
                 </p>
             </div>
         </div>
@@ -21,15 +29,20 @@
 
 <script>
 import { wsEmit, wsOn } from 'api';
-
 export default {
+    name: 'chat',
     data() {
         return {
             content: '',
-            shouldShowMsg: [],
+            shouldShowMsg: JSON.parse(this.getStroage(this.$route.params.uid) || '[]'),
+            friend: this.$route.params,
+            myAvatar: this.getStroage('avatar'),
+            myName: this.getStroage('name'),
+            myUid: this.getStroage('uid')
         };
     },
     created() {
+        console.log(this.shouldShowMsg, 'shouldShowMsg')
         wsOn('newMsg' ,msg => {
             this.shouldShowMsg.push({
                 byme: false,
@@ -41,28 +54,57 @@ export default {
     methods: {
         submit() {
             if (!this.content) return;
-            wsEmit('sendMsg', this.content, msg => {
-                this.shouldShowMsg.push({
-                    byme: true,
-                    msg
-                });
-                this.content = '';
-                this.autoBottom();
+            const sender = {
+                name: this.myName,
+                avatar: this.myAvatar,
+                uid: this.myUid,
+                msg: this.content
+            };
+            wsEmit('send-private-chat', sender, this.friend.uid);
+            this.shouldShowMsg.push({
+                byme: true,
+                msg: this.content
             });
+            this.content = '';
+            this.autoBottom();
         },
         autoBottom() {
             window.scrollTo({ 
                 top: window.screen.height + 9999, 
                 behavior: "smooth" 
             });
+        },
+        goBack() {
+            this.$router.push({
+                name: 'home'
+            })
+            
         }
     },
 };
 </script>
 
 <style lang="less">
+    .fix-top {
+        width: 100%;
+        height: 28px;
+        position: fixed;
+        top: 0;
+        z-index: 111;
+        background-color: rgb(226, 223, 223);
+        text-align: center;
+        line-height: 28px;
+        .el-icon-arrow-left {
+            position: absolute;
+            left: 2px;
+            &::before {
+                font-size: 28px;
+            }
+        }
+    }
     .content-top {
         padding: 0 8px;
+        margin-top: 28px;
         margin-bottom: 33px;
         .row-msg {
             overflow: hidden;
@@ -98,9 +140,9 @@ export default {
                     right: -40px;
                 }
                 img {
-                    width: 20px;
+                    width: 30px;
+                    height: 30px;
                     vertical-align: -3px;
-                    margin-left: 3px;
                 }
             }
         }

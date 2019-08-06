@@ -21,8 +21,10 @@ const path_1 = __importDefault(require("path"));
 const request_1 = __importDefault(require("request"));
 const http_1 = __importDefault(require("http"));
 const socket_io_1 = __importDefault(require("socket.io"));
+const koa_static_1 = __importDefault(require("koa-static"));
 const app = new koa_1.default();
 const router = new koa_router_1.default();
+const staticPath = path_1.default.resolve(__dirname, './upload');
 const options = {
     multipart: true,
     formidable: {
@@ -40,11 +42,27 @@ function requestGet(url) {
 }
 app.use(koa_body_1.default(options));
 app.use(koa2_cors_1.default());
-router.post('/adduser', (ctx) => __awaiter(this, void 0, void 0, function* () {
-    const { name, age } = ctx.request.body;
-    yield data_1.addUser({
+app.use(koa_static_1.default(staticPath));
+router.post('/addimg', (ctx) => __awaiter(this, void 0, void 0, function* () {
+    const file = ctx.request.files.file; // 获取上传文件 imgfile 为前端自定义
+    const reader = fs_1.default.createReadStream(file.path); // 创建读流
+    let filePath = path_1.default.resolve(__dirname, 'upload/') + `/${file.name}`;
+    const upStream = fs_1.default.createWriteStream(filePath);
+    reader.pipe(upStream);
+    ctx.body = {
+        url: file.name
+    };
+})).get('/emotions', (ctx) => __awaiter(this, void 0, void 0, function* () {
+    yield requestGet('https://api.weibo.com/2/emotions.json?source=1362404091').then(res => {
+        ctx.body = res;
+    });
+})).post('/register', (ctx) => __awaiter(this, void 0, void 0, function* () {
+    let { name, password, avatar } = ctx.request.body;
+    avatar = avatar ? avatar : 'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png'; // 默认头像
+    yield data_1.register({
         name,
-        age
+        password,
+        avatar
     }).then((res) => {
         if (res) {
             ctx.body = {
@@ -57,26 +75,32 @@ router.post('/adduser', (ctx) => __awaiter(this, void 0, void 0, function* () {
             };
         }
     });
-})).post('/addimg', (ctx) => __awaiter(this, void 0, void 0, function* () {
-    const file = ctx.request.files.imgfile; // 获取上传文件 imgfile 为前端自定义
-    const reader = fs_1.default.createReadStream(file.path); // 创建读流
-    let filePath = path_1.default.resolve(__dirname, 'upload/') + `/${file.name}`;
-    const upStream = fs_1.default.createWriteStream(filePath);
-    reader.pipe(upStream);
-    ctx.body = {
-        url: 'xxxx'
-    };
-})).get('/emotions', (ctx) => __awaiter(this, void 0, void 0, function* () {
-    yield requestGet('https://api.weibo.com/2/emotions.json?source=1362404091').then(res => {
-        ctx.body = res;
-    });
+})).post('/login', (ctx) => __awaiter(this, void 0, void 0, function* () {
+    let { name, password } = ctx.request.body;
+    const data = yield data_1.login({ name, password });
+    ctx.body = data;
+})).post('/userInfo', (ctx) => __awaiter(this, void 0, void 0, function* () {
+    let { uid } = ctx.request.body;
+    const data = yield data_1.userInfo(uid);
+    ctx.body = data;
 }));
 app.use(router.routes());
 app.use(router.allowedMethods());
+const allUserOnline = [];
 const server = http_1.default.createServer(app.callback());
 const io = socket_io_1.default(server);
 //监听socket连接
 io.on('connection', (socket) => {
+    socket.on('online', (user) => {
+        allUserOnline[user] = socket;
+        console.log(allUserOnline.length);
+    });
+    socket.on('send-private-chat', (sender, receiver) => {
+        const nowSocket = allUserOnline[receiver];
+        if (nowSocket) {
+            nowSocket.emit('receive-private-chat', sender);
+        }
+    });
     socket.on('sendMsg', (msg, fn) => {
         fn(msg);
         socket.broadcast.emit('newMsg', msg);

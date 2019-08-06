@@ -57,7 +57,7 @@ export default {
       this.editor.customConfig.uploadImgHeaders = {
         methods: 'post',
       };// 自定义 header
-      this.editor.customConfig.uploadFileName = 'imgfile'; // 后端接受上传文件的参数名
+      this.editor.customConfig.uploadFileName = 'file'; // 后端接受上传文件的参数名
       this.editor.customConfig.uploadImgMaxSize = 2 * 1024 * 1024; // 将图片大小限制为 2M
       this.editor.customConfig.uploadImgMaxLength = 6; // 限制一次最多上传 3 张图片
       this.editor.customConfig.uploadImgTimeout = 3 * 60 * 1000; // 设置超时时间
