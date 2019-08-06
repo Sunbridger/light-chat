@@ -92,3 +92,13 @@ const getuser = (params) => {
     return query(_sql);
 };
 exports.getuser = getuser;
+const online = (uid) => {
+    const _sql = `update user set online=1 where uid=${uid}`;
+    return query(_sql);
+};
+exports.online = online;
+const offline = (uid) => {
+    const _sql = `update user set online=0 where uid=${uid}`;
+    return query(_sql);
+};
+exports.offline = offline;

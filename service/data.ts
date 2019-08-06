@@ -74,11 +74,21 @@ const getuser = (params: {uid: number}) => {
     const _sql = `select * from user where uid!=${uid} order by time asc`;
     return query(_sql);
 }
+const online = (uid: number) => {
+    const _sql = `update user set online=1 where uid=${uid}`;
+    return query(_sql);
+};
+const offline = (uid: number) => {
+    const _sql = `update user set online=0 where uid=${uid}`;
+    return query(_sql);
+};
 export {
     register,
     login,
     userInfo,
     savemsg,
     getmsgoto,
-    getuser
+    getuser,
+    online,
+    offline
 }

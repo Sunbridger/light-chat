@@ -105,6 +105,7 @@ const io = socket_io_1.default(server);
 io.on('connection', (socket) => {
     socket.on('online', (user) => {
         allUserOnline[user] = socket;
+        data_1.online(user);
     });
     socket.on('send-private-chat', (sender, receiveruid) => {
         const nowSocket = allUserOnline[receiveruid];
@@ -116,7 +117,9 @@ io.on('connection', (socket) => {
         fn(msg);
         socket.broadcast.emit('newMsg', msg);
     });
-    socket.on('disconnect', (msg) => {
+    socket.on('offline', (user) => {
+        allUserOnline[user] = null;
+        data_1.offline(user);
     });
 });
 server.listen(3000, () => {

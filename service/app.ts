@@ -2,7 +2,7 @@ import Koa from 'koa';
 import koaBody from 'koa-body';
 import Router from 'koa-router';
 import cors from 'koa2-cors';
-import { register, login, userInfo, savemsg, getmsgoto, getuser } from './data';
+import { register, login, userInfo, savemsg, getmsgoto, getuser, online, offline } from './data';
 import fs from 'fs';
 import path from 'path'; 
 import request from 'request';
@@ -93,8 +93,9 @@ const server = http.createServer(app.callback());
 const io = socket(server);
 //监听socket连接
 io.on('connection', (socket: any) => {
-    socket.on('online', (user: any) => {
+    socket.on('online', (user: number) => {
         allUserOnline[user] = socket;
+        online(user)
     });
     
     socket.on('send-private-chat', (sender: any, receiveruid: number) => {
@@ -107,8 +108,9 @@ io.on('connection', (socket: any) => {
         fn(msg)
         socket.broadcast.emit('newMsg', msg);
     });
-    socket.on('disconnect', (msg: any) => {
-        
+    socket.on('offline', (user: number) => {
+        allUserOnline[user] = null;
+        offline(user)
     });
 })
 server.listen(3000, () => {
