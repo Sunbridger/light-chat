@@ -27,7 +27,7 @@
         </div>
         <div class="nav-bottom">
             <p v-for="(tab, index) in item" :key="index" class="nav-p" :class="{active: tab.active}" @click="tabSelect(index, tab.tabName)">
-                <i class="el-icon-user-solid"></i>{{tab.value}}
+                <i :class="tab.icon"></i>{{tab.value}}
             </p>
         </div>
     </div>

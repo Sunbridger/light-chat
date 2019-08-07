@@ -37,26 +37,41 @@ const router = new Router({
     {
         path: '/chat',
         name:'chat',
-        component: Chat,
-        beforeEnter: (to, from, next) => {
-            if (window.localStorage.uid && to.params.uid) {
-                next()
-                setTimeout(() => {
-                    window.scrollTo({ 
-                        top: window.screen.height + 9999, 
-                        behavior: "smooth" 
-                    });
-                }, 500);
-            } else {
-                next({
-                    name: 'login'
-                })
-            }
-        },
+        component: Chat
 
     }
   ],
 });
 
+router.beforeEach((to, from, next) => {
+    console.log(to, from,'-')
+    if (window.localStorage.uid) {
+        if (to.name == 'chat' && to.params.uid) {
+            next()
+            setTimeout(() => {
+                window.scrollTo({ 
+                    top: window.screen.height + 9999, 
+                    behavior: "smooth" 
+                });
+            }, 500);
+        } else {
+            if (to.name == 'home') {
+                next();
+            } else {
+                next({
+                    name: 'home'
+                })
+            }
+        }
+    } else {
+        if (to.name == 'login') {
+            next();
+        } else {
+            next({
+                name: 'login'
+            })
+        }
+    }
+})
 
 export default router;
