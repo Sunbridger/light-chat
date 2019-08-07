@@ -64,7 +64,7 @@ router.beforeEach((to, from, next) => {
             }
         }
     } else {
-        if (to.name == 'login') {
+        if (to.name == 'login' || to.name == 'register') {
             next();
         } else {
             next({
