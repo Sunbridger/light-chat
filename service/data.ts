@@ -71,7 +71,7 @@ const getmsgoto = (params: {uid1: number, uid2: number}) => {
 };
 const getuser = (params: {uid: number}) => {
     const { uid } = params;
-    const _sql = `select * from user where uid!=${uid} order by time asc`;
+    const _sql = `select * from user where uid!=${uid} order by time desc`;
     return query(_sql);
 }
 const online = (uid: number) => {

@@ -88,7 +88,7 @@ const getmsgoto = (params) => {
 exports.getmsgoto = getmsgoto;
 const getuser = (params) => {
     const { uid } = params;
-    const _sql = `select * from user where uid!=${uid} order by time asc`;
+    const _sql = `select * from user where uid!=${uid} order by time desc`;
     return query(_sql);
 };
 exports.getuser = getuser;
