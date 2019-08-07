@@ -97,7 +97,9 @@ router.post('/addimg', (ctx) => __awaiter(this, void 0, void 0, function* () {
     ctx.body = data;
 })).post('/whoOnline', (ctx) => __awaiter(this, void 0, void 0, function* () {
     let { uid } = ctx.request.body;
-    let data = yield data_1.whoOnline(uid);
+    let obj = yield data_1.whoOnline(uid);
+    let data = obj.data;
+    // let data2 = obj.data2;
     data = data.map((el) => el.uid);
     ctx.body = data;
 })).get('/', (ctx) => __awaiter(this, void 0, void 0, function* () {

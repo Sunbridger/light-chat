@@ -10,33 +10,6 @@ import { wsEmit, wsOn, post } from 'api';
 
 import { mapActions, mapMutations } from 'vuex';
 
-const friends = [
-    {
-        name: 'Sunbridger',
-        uid: 19,
-        avatar: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
-    },
-    {
-        name: '曹奥',
-        uid: 127,
-        avatar: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
-    },
-    {
-        name: '猴子啊',
-        uid: 22,
-        avatar: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
-    },
-    {
-        name: '万知啊',
-        uid: 981,
-        avatar: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
-    },
-    {
-        name: '刘阿斯',
-        uid: 2321,
-        avatar: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
-    },
-];
 export default {
     data() {
         return {
@@ -49,13 +22,24 @@ export default {
             // 监听给我发私信的事件...
             wsOn('receive-private-chat' ,(sender) => {
                 this.audioTip()
+                
                 if (this.$route.name !== 'chat') {
                     const key = uid + '-' + sender.uid;
                     let num = this.getStroage(key) || 0;
-                    this.saveStroage({
-                        [key]: ++num
-                    });
-                    // location.reload(); 
+                    if (!num) {
+                        this.saveStroage({
+                            [key]: ++num
+                        });
+                        location.reload(); 
+                    } else {
+                        this.$message({
+                            message: `${sender.name}发来一条新消息`,
+                            type: 'success'
+                        })
+                    }
+                    // this.saveStroage({
+                    //     [key]: ++num
+                    // });
                 } else {
                     this.getShouldShowMsg({
                         uid1: uid,

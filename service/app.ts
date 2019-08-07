@@ -83,9 +83,11 @@ router.post('/addimg', async (ctx: any) => {
     ctx.body = data;
 }).post('/whoOnline', async (ctx: any) => {
     let { uid } = ctx.request.body;
-    let data: any = await whoOnline(uid);
+    let obj: any = await whoOnline(uid);
+    let data = obj.data;
+    // let data2 = obj.data2;
     data = data.map((el: any)=> el.uid);
-    ctx.body = data;
+    ctx.body = data
 }).get('/', async (ctx: any) => {
     ctx.body = 'ok';
 })

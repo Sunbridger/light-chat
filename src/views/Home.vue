@@ -14,7 +14,7 @@
         </div>
         <div v-if="tabName === 'friends'" class="content-box">
             <div v-for="friend in friends" :key="friend.uid" class="flex" @click="getChat(friend)">
-                <el-badge :value="getNum(friend.uid)" :max="99" class="item">    
+                <el-badge :hidden="getNum(friend.uid)" is-dot  class="item">    
                     <el-avatar shape="square" :size="50" :src="friend.avatar"></el-avatar>
                 </el-badge>
                 <p class="flex1">{{friend.name}}</p>
@@ -81,7 +81,7 @@ export default {
         getNum(uid) {
             const key = this.uid + '-' + uid;
             let num = this.getStroage(key);
-            return num;
+            return !num;
         },
         getWhoOnline() {
             post('/whoOnline', {uid: this.uid}).then(({data}) => {

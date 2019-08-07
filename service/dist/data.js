@@ -102,8 +102,16 @@ const offline = (uid) => {
     return query(_sql);
 };
 exports.offline = offline;
-const whoOnline = (uid) => {
-    const _sql = `select uid from user where online=1 and uid!=${uid}`;
+const getAllMsgHasMe = (uid) => __awaiter(this, void 0, void 0, function* () {
+    const _sql = `select * from chatmsg group by fromuid where  touid=${uid} order by time desc`;
     return query(_sql);
-};
+});
+const whoOnline = (uid) => __awaiter(this, void 0, void 0, function* () {
+    const _sql = `select uid from user where online=1 and uid!=${uid}`;
+    // const data2 = await getAllMsgHasMe(uid);
+    const data = yield query(_sql);
+    return {
+        data,
+    };
+});
 exports.whoOnline = whoOnline;

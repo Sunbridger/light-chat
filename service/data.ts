@@ -82,10 +82,21 @@ const offline = (uid: number) => {
     const _sql = `update user set online=0 where uid=${uid}`;
     return query(_sql);
 };
-const whoOnline = (uid: number) => {
-    const _sql = `select uid from user where online=1 and uid!=${uid}`;
+const getAllMsgHasMe = async (uid: number) => {
+    const _sql = `select * from chatmsg group by fromuid where  touid=${uid} order by time desc`
     return query(_sql);
+}
+const whoOnline = async (uid: number) => {
+    const _sql = `select uid from user where online=1 and uid!=${uid}`;
+    // const data2 = await getAllMsgHasMe(uid);
+    const data = await query(_sql);
+    return {
+        data,
+        // data2
+    }
 };
+
+
 export {
     register,
     login,
