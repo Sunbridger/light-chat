@@ -18,7 +18,8 @@
 </template>
 <script>
 import { get, post, wsEmit, wsOn } from 'api';
-import Global from '../../global.js'
+import Global from '../../global.js';
+import { mapMutations } from 'vuex';
 const serviceImg = Global + 'addimg';
 
 export default {

@@ -4,7 +4,7 @@ import socket from 'socket.io-client';
 import Global from '../../global.js';
 const io = socket(Global.replace('http', 'ws'));
 
-
+console.log(io, 'io')
 export const get = (url, opt = {}) => {
     return axios.get('/api' + url, opt);
 }

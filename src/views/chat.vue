@@ -64,7 +64,8 @@ export default {
         },
         getmsgoto() {
             this.getShouldShowMsg({
-                uid: this.friend.uid //他人的uid写入即可
+                uid1: this.myUid,
+                uid2: this.friend.uid 
             });
         },
         byme(uid) {

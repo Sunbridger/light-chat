@@ -1,10 +1,10 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { post, get } from 'api/index.js';
+import { post } from 'api/index.js';
 Vue.use(Vuex);
 
 const shouldShowMsg: any[] = [];
-const friends: any[] = []
+const friends: any[] = [];
 export default new Vuex.Store({
     state: {
         friends,
@@ -21,18 +21,18 @@ export default new Vuex.Store({
             } else {
                 state.shouldShowMsg.push(data);
             }
-        }
+        },
     },
     actions: {
-        async getFriends(store) {
-            post('/getuser', {uid: window.localStorage.uid}).then((res: any) => {
+        async getFriends(store, params) {
+            post('/getuser', {uid: params.uid}).then((res: any) => {
                 store.commit('changeFriends', res.data);
             })
         },
         async getShouldShowMsg(store, params) {
             post('/getmsgoto', {
-                uid1: window.localStorage.uid,
-                uid2: params.uid
+                uid1: params.uid1,
+                uid2: params.uid2
             }).then((res: any) => {
                 store.commit('changeShouldShowMsg', res.data);
             })

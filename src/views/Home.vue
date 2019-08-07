@@ -12,19 +12,21 @@
                 </el-switch>
             </p>
         </div>
-        <div v-if="name === 'friends'" class="content-box">
+        <div v-if="tabName === 'friends'" class="content-box">
             <div v-for="friend in friends" :key="friend.uid" class="flex" @click="getChat(friend)">
                 <el-badge :value="getNum(friend.uid)" :max="99" class="item">    
                     <el-avatar shape="square" :size="50" :src="friend.avatar"></el-avatar>
                 </el-badge>
                 <p class="flex1">{{friend.name}}</p>
+                <p v-if="onlineFn(friend.uid)" class="font-grenn">在线</p>
+                <p v-else class="font-red">离线</p>
             </div>
         </div>
-        <div v-if="name === 'xxx'">
+        <div v-if="tabName === 'xxx'">
             ...开发中
         </div>
         <div class="nav-bottom">
-            <p v-for="(tab, index) in item" :key="index" class="nav-p" :class="{active: tab.active}" @click="tabSelect(index, tab.name)">
+            <p v-for="(tab, index) in item" :key="index" class="nav-p" :class="{active: tab.active}" @click="tabSelect(index, tab.tabName)">
                 <i class="el-icon-user-solid"></i>{{tab.value}}
             </p>
         </div>
@@ -33,20 +35,20 @@
 
 
 <script>
-import { wsEmit, wsOn } from 'api';
-import { mapActions } from 'vuex';
+import { wsEmit, wsOn, post } from 'api';
+import { mapActions, mapGetters } from 'vuex';
 const item = [
     {
         value: '我的好友',
         active: true,
         icon: 'el-icon-user-solid',
-        name: 'friends'
+        tabName: 'friends'
     },
     {
         value: '待开发',
         active: false,
         icon: 'el-icon-s-goods',
-        name: 'xxx'
+        tabName: 'xxx'
     },
 ]
 
@@ -55,10 +57,11 @@ export default {
     data() {
         return {
             item: Object.assign([], item),
-            name: 'friends',
-            title: window.localStorage.name,
+            tabName: 'friends',
+            value:'',
+            onlineFriends: [],
             uid: window.localStorage.uid,
-            value:''
+            title: window.localStorage.name
         };
     },
     computed: {
@@ -68,16 +71,22 @@ export default {
     },
     created() {
         wsEmit('online', this.uid);
-        this.getFriends();
+        this.getFriends({uid: this.uid});
+        this.getWhoOnline();
     },
     methods: {
         ...mapActions([
-            'getFriends'
+            'getFriends',
         ]),
         getNum(uid) {
             const key = this.uid + '-' + uid;
             let num = this.getStroage(key);
             return num;
+        },
+        getWhoOnline() {
+            post('/whoOnline', {uid: this.uid}).then(({data}) => {
+                this.onlineFriends = data;
+            })
         },
         exit() {
             ['avatar', 'name', 'uid'].forEach(el => {
@@ -96,13 +105,16 @@ export default {
                     el.active = false;
                 }
             });
-            this.name = name;
+            this.tabName = name;
         },
         getChat(friend) {
             this.$router.push({
                 name: 'chat',
                 params: friend
             })
+        },
+        onlineFn(uid) {
+            return this.onlineFriends.includes(uid);
         }
     },
 };
@@ -139,6 +151,12 @@ export default {
             margin: 0 0 0 10px;
             line-height: 50px;
             border-bottom: 1px solid #ccc;
+        }
+        .font-red {
+            color: #909399;
+        }
+        .font-grenn {
+            color: #67C23A;
         }
     }
 }
