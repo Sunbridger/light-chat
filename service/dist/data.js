@@ -102,3 +102,8 @@ const offline = (uid) => {
     return query(_sql);
 };
 exports.offline = offline;
+const whoOnline = (uid) => {
+    const _sql = `select uid from user where online=1 and uid!=${uid}`;
+    return query(_sql);
+};
+exports.whoOnline = whoOnline;

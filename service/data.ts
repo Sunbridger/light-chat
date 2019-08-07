@@ -82,6 +82,10 @@ const offline = (uid: number) => {
     const _sql = `update user set online=0 where uid=${uid}`;
     return query(_sql);
 };
+const whoOnline = (uid: number) => {
+    const _sql = `select uid from user where online=1 and uid!=${uid}`;
+    return query(_sql);
+};
 export {
     register,
     login,
@@ -90,5 +94,6 @@ export {
     getmsgoto,
     getuser,
     online,
-    offline
+    offline,
+    whoOnline
 }

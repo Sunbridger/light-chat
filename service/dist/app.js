@@ -95,30 +95,44 @@ router.post('/addimg', (ctx) => __awaiter(this, void 0, void 0, function* () {
     let { uid } = ctx.request.body;
     const data = yield data_1.getuser({ uid });
     ctx.body = data;
+})).post('/whoOnline', (ctx) => __awaiter(this, void 0, void 0, function* () {
+    let { uid } = ctx.request.body;
+    let data = yield data_1.whoOnline(uid);
+    data = data.map((el) => el.uid);
+    ctx.body = data;
 }));
 app.use(router.routes());
 app.use(router.allowedMethods());
-const allUserOnline = [];
+const allUserOnline = {};
 const server = http_1.default.createServer(app.callback());
 const io = socket_io_1.default(server);
-//监听socket连接
 io.on('connection', (socket) => {
+    // 在线
     socket.on('online', (user) => {
+        socket.id = user;
         allUserOnline[user] = socket;
         data_1.online(user);
     });
+    // 私信
     socket.on('send-private-chat', (sender, receiveruid) => {
         const nowSocket = allUserOnline[receiveruid];
         if (nowSocket) {
             nowSocket.emit('receive-private-chat', sender);
         }
+        else {
+            console.log('对方暂时不在线');
+        }
     });
-    socket.on('sendMsg', (msg, fn) => {
-        fn(msg);
-        socket.broadcast.emit('newMsg', msg);
+    // 网络自动检测下线
+    socket.on('disconnect', () => {
+        let user = Number(socket.id);
+        if (user) {
+            allUserOnline[user] = false;
+            data_1.offline(user);
+        }
     });
+    // 手动下线
     socket.on('offline', (user) => {
-        allUserOnline[user] = null;
         data_1.offline(user);
     });
 });

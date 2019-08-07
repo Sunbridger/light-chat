@@ -2,7 +2,7 @@ import Koa from 'koa';
 import koaBody from 'koa-body';
 import Router from 'koa-router';
 import cors from 'koa2-cors';
-import { register, login, userInfo, savemsg, getmsgoto, getuser, online, offline } from './data';
+import { register, login, userInfo, savemsg, getmsgoto, getuser, online, offline, whoOnline } from './data';
 import fs from 'fs';
 import path from 'path'; 
 import request from 'request';
@@ -81,6 +81,11 @@ router.post('/addimg', async (ctx: any) => {
     let { uid } = ctx.request.body;
     const data = await getuser({ uid });
     ctx.body = data;
+}).post('/whoOnline', async (ctx: any) => {
+    let { uid } = ctx.request.body;
+    let data: any = await whoOnline(uid);
+    data = data.map((el: any)=> el.uid);
+    ctx.body = data;
 })
 
 app.use(router.routes());
@@ -88,30 +93,39 @@ app.use(router.allowedMethods());
 
 
 
-const allUserOnline: any = [];
+const allUserOnline: any = {};
 const server = http.createServer(app.callback());
 const io = socket(server);
-//监听socket连接
+
 io.on('connection', (socket: any) => {
+    // 在线
     socket.on('online', (user: number) => {
+        socket.id = user;
         allUserOnline[user] = socket;
         online(user)
     });
     
+    // 私信
     socket.on('send-private-chat', (sender: any, receiveruid: number) => {
         const nowSocket = allUserOnline[receiveruid];
         if (nowSocket) {
             nowSocket.emit('receive-private-chat',sender);
+        } else {
+            console.log('对方暂时不在线')
         }
     });
-    socket.on('sendMsg', (msg: string|undefined, fn:any) => {
-        fn(msg)
-        socket.broadcast.emit('newMsg', msg);
-    });
+    // 网络自动检测下线
+    socket.on('disconnect', () => {
+        let user = Number(socket.id);
+        if (user) {
+            allUserOnline[user] = false;
+            offline(user);
+        }
+    })
+    // 手动下线
     socket.on('offline', (user: number) => {
-        allUserOnline[user] = null;
-        offline(user)
-    });
+        offline(user);
+    })
 })
 server.listen(3000, () => {
     console.log(3000);
