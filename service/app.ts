@@ -86,6 +86,8 @@ router.post('/addimg', async (ctx: any) => {
     let data: any = await whoOnline(uid);
     data = data.map((el: any)=> el.uid);
     ctx.body = data;
+}).get('/', async (ctx: any) => {
+    ctx.body = 'ok';
 })
 
 app.use(router.routes());
