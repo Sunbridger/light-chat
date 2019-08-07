@@ -47,7 +47,7 @@ const item = [
     {
         value: '待开发',
         active: false,
-        icon: 'el-icon-s-goods',
+        icon: 'el-icon-upload',
         tabName: 'xxx'
     },
 ]
@@ -135,7 +135,6 @@ export default {
     }
     .nav-p {
         margin: 0;
-        display: inline-block;
         margin: 5px 10px 0 0;
         float: right;
     }
@@ -164,7 +163,7 @@ export default {
     position: fixed;
     bottom: 0;
     width: 100%;
-    background-color: #e2dfdf;
+    background-color: #DCDFE6;
     display: flex;
     justify-content: space-around;
     .nav-p {
@@ -175,7 +174,7 @@ export default {
         line-height: 38px;
     }
     .active {
-        background-color: aquamarine;
+        background-color: #409EFF;
     }
 }
 </style>
