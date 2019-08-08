@@ -70,7 +70,7 @@ export default {
                     return;
                 }
                 this.loading = true;
-                // this.params.article = this.params.article.replace(/(^\s*)|(\s*$)/g, ''); // 去除前后空格
+                this.params.article = this.params.article.replace(/(^\s*)/g, ''); // 去除前后空格
                 post('/sendArticle', {...this.params}).then(({data}) => {
                     this.loading = false
                     if (data) {

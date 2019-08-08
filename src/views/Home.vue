@@ -19,7 +19,7 @@
             <articles></articles>
         </div>
         <div class="nav-bottom">
-            <p v-for="(tab, index) in item" :key="index" class="nav-p" :class="{active: tab.active}" @click="tabSelect(index, tab.tabName)">
+            <p v-for="(tab, index) in item" :key="tab.value" class="nav-p" :class="{active: tab.active}" @click="tabSelect(index, tab.tabName)">
                 <i :class="tab.icon"></i>{{tab.value}}
             </p>
         </div>
@@ -49,9 +49,9 @@ export default {
                     tabName: 'dynamic'
                 }
             ],
-            tabName: 'friends',
             title: window.localStorage.name,
-            uid: window.localStorage.uid
+            uid: window.localStorage.uid,
+            tabName: 'friends'
         };
     },
     computed: {
@@ -60,7 +60,6 @@ export default {
         }
     },
     created() {
-        console.log(999999,'asdadas')
         wsEmit('online', this.uid);
     },
     methods: {

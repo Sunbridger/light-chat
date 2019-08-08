@@ -1,6 +1,6 @@
 <template>
     <div class="pg-article">
-        <div v-if="nodata">还没有小伙伴发动态呢！</div>
+        <p v-if="nodata" class="nodata">还没有小伙伴发动态呢！</p>
         <div v-else>
             <div
                 class="article-box" 
@@ -102,6 +102,9 @@ export default {
 <style lang="less">
 .pg-article {
     font-weight: 100;
+    .nodata {
+        text-align: center;
+    }
     .article-box {
         border-bottom: 1px solid #EBEEF5;
         margin-top: 15px;
