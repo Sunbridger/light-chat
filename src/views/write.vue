@@ -1,13 +1,13 @@
 <template>
     <div class="pg-write">
         <div class="fix-top">
-            <i class="el-icon-arrow-left" @click="goBack"></i>
+            <i class="el-icon-arrow-left" @click="goBack">发表文字</i>
+            
         </div>
-        <div class="tip-top">有什么新鲜事想告诉大家<em>？</em></div>
         <div class="text-box">
            <el-input
                 type="textarea"
-                placeholder="在此输入内容吧"
+                placeholder="这一刻的想法..."
                 :autosize="{ minRows: 4, maxRows: 12}"
                 v-model="params.article">
             </el-input>
@@ -15,9 +15,8 @@
         <div class="bottom-box">
             <el-radio v-model="params.ispublic" :label="0">仅自己可见</el-radio>
             <el-radio v-model="params.ispublic" :label="1">公开</el-radio>
-            <el-button size="medium" type="primary" @click="submit" :loading="loading">发送</el-button>
+            <el-button size="medium" type="primary" @click="submit" :disabled="loading" :loading="loading">发送</el-button>
         </div>
-        {{params.article}}
     </div>
 </template>
 
@@ -105,15 +104,16 @@ export default {
     word-break: break-all;
     .fix-top {
         background-color: white;
-    }
-    .tip-top {
-        text-align: center;
-        color: #303133;
-        margin-top: 38px;
+        .el-icon-arrow-left {
+            font-size: 16px;
+            &::before {
+                font-size: 20px;
+            }
+        }
     }
     .text-box {
         box-sizing: border-box;
-        margin: 15px 0 5px 0;
+        margin: 55px 0 5px 0;
         padding: 0 10px 0 10px;
         .el-textarea {
             border: 1px solid #DCDFE6;

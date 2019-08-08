@@ -23,6 +23,9 @@
                 <i :class="tab.icon"></i>{{tab.value}}
             </p>
         </div>
+        <span class="upbox" @click="up">
+            <i class="el-icon-upload2 "></i>
+        </span>
     </div>
 </template>
 
@@ -87,6 +90,12 @@ export default {
             });
             this.tabName = name;
         },
+        up() {
+            window.scrollTo({ 
+                top: 0, 
+                behavior: "smooth" 
+            });
+        }
     },
     components: {
         Articles,
@@ -141,5 +150,17 @@ export default {
         background-color: #67C23A;
         color: white;
     }
+}
+.upbox {
+    display: block;
+    position: fixed;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    bottom: 43px;
+    border-radius: 50%;
+    background-color: rgba(220,220,221,.5);
+    right: 0;
+    text-align: center;
 }
 </style>

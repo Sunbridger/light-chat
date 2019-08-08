@@ -90,5 +90,9 @@ export default {
         margin: 0;
         padding: 0;
         overscroll-behavior-y: contain;
+        &::-webkit-scrollbar{
+            width: 0;
+            height: 0;
+        }
     }
 </style>
