@@ -29,4 +29,6 @@ Vue.use(Upload);
 Vue.use(Badge);
 Vue.use(Switch);
 Vue.prototype.$message = Message;
+
+Vue.prototype.$loading = Loading.service;
 Vue.use(Loading.directive);

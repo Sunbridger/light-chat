@@ -3,8 +3,10 @@ const path = require('path');
 const resolve = dir => path.join(__dirname, dir);
 
 const target = process.env.TARGET;
-
+// const publicPath = 'https://sunbridger.github.io/chat2'
+// const publicPath = resolve('./dist')
 module.exports = {
+//   publicPath,
   devServer: {
     proxy: {
       '/api': {
@@ -17,6 +19,7 @@ module.exports = {
       },
     },
   },
+  
   configureWebpack: (config) => {
     if (process.env.NODE_ENV === 'production') {
       config.mode = 'production';
@@ -28,6 +31,7 @@ module.exports = {
       '@': resolve('./src'),
       'view': resolve('./src/views'),
       'api': resolve('./src/api'),
+      'assets': resolve('./src/assets') 
     };
   },
 };

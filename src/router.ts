@@ -4,12 +4,12 @@ import Login from 'view/login.vue';
 import Register from 'view/register.vue';
 import Chat from 'view/chat.vue';
 import Home from 'view/home.vue'
-
+import Write from 'view/write.vue'
 Vue.use(Router);
 
 
 const router = new Router({
-  mode: 'history',
+  mode: 'hash',
   base: process.env.BASE_URL,
   routes: [
     {
@@ -39,29 +39,37 @@ const router = new Router({
         name:'chat',
         component: Chat
 
+    },
+    {
+        path: '/write',
+        name:'write',
+        component: Write
+
     }
   ],
 });
-
+const fnScrol =(h = 0) => {
+    setTimeout(() => {
+        window.scrollTo({ 
+            top: h, 
+            behavior: "smooth" 
+        });
+    }, 500);
+}
 router.beforeEach((to, from, next) => {
-    console.log(to, from,'-')
     if (window.localStorage.uid) {
-        if (to.name == 'chat' && to.params.uid) {
-            next()
-            setTimeout(() => {
-                window.scrollTo({ 
-                    top: window.screen.height + 9999, 
-                    behavior: "smooth" 
-                });
-            }, 500);
-        } else {
-            if (to.name == 'home') {
-                next();
+        if (to.name == 'chat') {
+            if (to.params.uid) {
+                next()
+                fnScrol(window.screen.height + 9999); 
             } else {
                 next({
                     name: 'home'
                 })
+                fnScrol(); 
             }
+        } else {
+            next()
         }
     } else {
         if (to.name == 'login' || to.name == 'register') {

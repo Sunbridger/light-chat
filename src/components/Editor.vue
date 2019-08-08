@@ -11,7 +11,6 @@ import { get, post } from 'api';
 
 
 export default {
-  name: 'Editorbar',
   data() {
     return {
       editor: null,
