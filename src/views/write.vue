@@ -15,9 +15,9 @@
         <div class="bottom-box">
             <el-radio v-model="params.ispublic" :label="0">仅自己可见</el-radio>
             <el-radio v-model="params.ispublic" :label="1">公开</el-radio>
-            <el-button size="medium" type="primary" @click="submit">发送</el-button>
+            <el-button size="medium" type="primary" @click="submit" :loading="loading">发送</el-button>
         </div>
-        <!-- <pre-wrap>{{content}}</pre-wrap> -->
+        {{params.article}}
     </div>
 </template>
 
@@ -38,7 +38,8 @@ export default {
                     name: window.localStorage.name,
                     avatar: window.localStorage.avatar
                 }
-            }
+            },
+            loading: false
         }
     },
     created() {
@@ -68,8 +69,15 @@ export default {
                     this.tipToast('warning', '内容不能为空哦')
                     return;
                 }
-                post('/sendArticle', {...this.params}).then(res => {
-                    console.log(res, 'res')
+                this.loading = true;
+                // this.params.article = this.params.article.replace(/(^\s*)|(\s*$)/g, ''); // 去除前后空格
+                post('/sendArticle', {...this.params}).then(({data}) => {
+                    this.loading = false
+                    if (data) {
+                        this.$router.push({
+                            name: 'home'
+                        })
+                    }
                 })
             } else {
                 this.$message.error('当前账号异常，请重新登陆');
@@ -95,6 +103,9 @@ export default {
     font-weight: 100;
     white-space: pre-wrap; 
     word-break: break-all;
+    .fix-top {
+        background-color: white;
+    }
     .tip-top {
         text-align: center;
         color: #303133;

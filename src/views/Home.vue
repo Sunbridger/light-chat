@@ -15,7 +15,7 @@
         <div v-if="tabName === 'friends'" class="content-box">
             <friends></friends>
         </div>
-        <div v-if="tabName === 'xxx'" class="content-box">
+        <div v-if="tabName === 'dynamic'" class="content-box">
             <articles></articles>
         </div>
         <div class="nav-bottom">
@@ -31,26 +31,24 @@
 import { wsEmit } from 'api';
 import Articles from 'component/articles.vue';
 import Friends from 'component/friends.vue';
-const item = [
-    {
-        value: '我的好友',
-        active: true,
-        icon: 'el-icon-user-solid',
-        tabName: 'friends'
-    },
-    {
-        value: '设置',
-        active: false,
-        icon: 'el-icon-s-tools',
-        tabName: 'xxx'
-    },
-]
 
 export default {
     name: 'home',
     data() {
         return {
-            item: Object.assign([], item),
+            item: [
+                {
+                    value: '我的好友',
+                    active: true,
+                    icon: 'el-icon-user-solid',
+                    tabName: 'friends'
+                },{
+                    value: '好友动态',
+                    active: false,
+                    icon: 'el-icon-s-help',
+                    tabName: 'dynamic'
+                }
+            ],
             tabName: 'friends',
             title: window.localStorage.name,
             uid: window.localStorage.uid
@@ -62,6 +60,7 @@ export default {
         }
     },
     created() {
+        console.log(999999,'asdadas')
         wsEmit('online', this.uid);
     },
     methods: {

@@ -91,7 +91,4 @@ export default {
         padding: 0;
         overscroll-behavior-y: contain;
     }
-    pre {
-        overflow: hidden;
-    }
 </style>

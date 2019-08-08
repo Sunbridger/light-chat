@@ -9,10 +9,7 @@
                 :value="getNum(friend.uid)" 
                 :max="10"  
                 class="item">    
-                <el-avatar 
-                    shape="square" 
-                    :size="50" 
-                    :src="friend.avatar"></el-avatar>
+                <el-avatar shape="square" :size="50" :src="friend.avatar"></el-avatar>
             </el-badge>
             <p class="flex1">
                 {{friend.name}}</p>
