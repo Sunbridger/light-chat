@@ -89,7 +89,7 @@ exports.getmsgoto = getmsgoto;
 const getuser = (params) => {
     const { uid } = params;
     // limit 0,20 
-    const _sql = `select name,online,avatar,uid from user where uid!=${uid} order by time desc`;
+    const _sql = `select name,online,avatar,uid from user where uid!=${uid} order by time desc,online desc`;
     return query(_sql);
 };
 exports.getuser = getuser;
