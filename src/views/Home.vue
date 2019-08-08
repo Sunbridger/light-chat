@@ -110,26 +110,30 @@ export default {
 }
 .nav-top {
     position: fixed;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    box-sizing: border-box; 
     background-color: #e2dfdf;
     top: 0;
     width: 100%;
-    height: 38px;
+    height: 50px;
     z-index: 2;
+    p {
+        margin: 0;
+    }
     .nav-p-t {
-        float: left;
-        margin: 8px 0 0 10px;
         font-size: 14px;
         color: #67C23A;
+        line-height: 32px;
     }
     .nav-p {
-        margin: 5px 10px 0 0;
-        float: right;
         font-size: 25px;
     }
 }
 .content-box {
-    padding: 10px 10px 38px 10px;
-    margin-top: 38px;
+    padding: 10px 10px 50px 10px;
+    margin-top: 50px;
 }
 .nav-bottom {
     position: fixed;
@@ -142,8 +146,8 @@ export default {
         flex: 1;
         text-align: center;
         margin: 0;
-        height: 38px;
-        line-height: 38px;
+        height: 50px;
+        line-height: 50px;
         font-weight: 100;
     }
     .active {
@@ -157,7 +161,7 @@ export default {
     width: 50px;
     height: 50px;
     line-height: 50px;
-    bottom: 66px;
+    bottom: 80px;
     border-radius: 50%;
     background-color: rgba(220,220,221,.5);
     right: 0;
