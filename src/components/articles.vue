@@ -6,15 +6,18 @@
                 class="article-box" 
                 v-for="row in articles" 
                 :key="row.aid">
-                <div class="article-box-top">
-                    <el-avatar shape="square" :size="35" :src="row.avatar"></el-avatar>
-                    <p>{{row.name}}</p>
-                </div>
-                <div class="article-box-mid">
-                    <pre>{{row.article}}</pre>
-                </div>
-                <div class="article-box-bottom">
-                    <span>{{row.time | format}}</span>
+                <div>
+                    <div class="article-box-top">
+                        <el-avatar shape="square" :size="35" :src="row.avatar"></el-avatar>
+                        <p>{{row.name}}</p>
+                    </div>
+                    <div class="article-box-mid">
+                        <pre>{{row.article}}</pre>
+                    </div>
+                    <div class="article-box-bottom">
+                        <span>{{row.time | format}}</span>
+                        <span v-if="row.onlyMe" class="el-icon-s-goods">仅自己可见</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -28,7 +31,8 @@ export default {
     data() {
         return {
             articles: [],
-            nodata: false
+            nodata: false,
+            uid: window.localStorage.uid,
         }
     },
     created() {
@@ -42,12 +46,17 @@ export default {
         getArticle() {
             post('/getArticle').then(({data}) => {
                 this.changeLoading()
-                if (data.length) {
-                    this.articles = data;
+                let d1, d2, d3;
+                d1 = data.filter(row => row.ispublic == 1); // 获取所有公开的
+                d2 = data.filter(row => row.uid == this.uid && !row.ispublic); // 获取我自己的私有的
+                d2.forEach(el => el.onlyMe = true); // 为我的data打备注
+                d3 = d2.concat(d1);
+                if (d3.length) {
+                    this.articles = d3;
                 } else {
                     this.nodata = true;
                 }
-            })
+            });
         },
         goBack() {
             this.$router.push({
@@ -134,6 +143,9 @@ export default {
             span {
                 color: #606266;
                 font-size: 12px;
+            }
+            .el-icon-s-goods {
+                margin-left: 10px;
             }
         }
     }

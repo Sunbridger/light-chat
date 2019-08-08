@@ -122,7 +122,7 @@ export default {
         color: #67C23A;
     }
     .nav-p {
-        margin: 0 10px 0 0;
+        margin: 5px 10px 0 0;
         float: right;
         font-size: 25px;
     }

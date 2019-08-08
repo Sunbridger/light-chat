@@ -101,9 +101,9 @@ const getArticle = (params: any) => {
     const { uid } = params;
     let _sql = '';
     if (uid) {
-        _sql = `select * from article where uid=${uid} and ispublic=1 order by time desc`
+        _sql = `select * from article where uid=${uid} and ispublic=0 order by time desc`
     } else {
-        _sql = `select * from article where ispublic=1 order by time desc`
+        _sql = `select * from article order by time desc`
     }
     return query(_sql);
 }
