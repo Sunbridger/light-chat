@@ -5,7 +5,7 @@
         element-loading-spinner="el-icon-loading"
         element-loading-background="rgba(220, 220, 220, 0.8)">
         <div class="nav-top">
-            <p class="nav-p-t">
+            <p class="nav-p-t" @click="exit">
                 欢迎您<span>{{title}}</span>
             </p>
             <p class="nav-p" @click="writeArtic">
@@ -67,12 +67,19 @@ export default {
     },
     methods: {
         exit() {
-            ['avatar', 'name', 'uid'].forEach(el => {
-                window.localStorage.removeItem(el);
-            })
-            wsEmit('offline', this.uid)
-            this.$router.push({
-                name: 'login'
+            this.$alert('是否退出登陆', '提示', {
+                confirmButtonText: '确定',
+                callback: action => {
+                    if (action == 'confirm') {
+                        ['avatar', 'name', 'uid'].forEach(el => {
+                            window.localStorage.removeItem(el);
+                        })
+                        wsEmit('offline', this.uid)
+                        this.$router.push({
+                            name: 'login'
+                        });        
+                    }
+                }
             });
         },
         writeArtic() {
