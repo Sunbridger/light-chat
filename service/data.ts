@@ -89,14 +89,24 @@ const getAllMsgHasMe = async (uid: number) => {
 }
 const whoOnline = async (uid: number) => {
     const _sql = `select uid from user where online=1 and uid!=${uid}`;
-    // const data2 = await getAllMsgHasMe(uid);
-    const data = await query(_sql);
-    return {
-        data,
-        // data2
-    }
+    return query(_sql);
 };
-
+const sendArticle = (params: {ispublic: number; article: string; user: {uid: number; name: string; avatar: string}}) => {
+    const { user , ispublic, article} = params; 
+    const { uid, name, avatar } = user;
+    const _sql = `insert into article (uid, name, avatar,article,ispublic ) value(${uid},'${name}','${avatar}','${article}', ${ispublic})`
+    return query(_sql);
+};
+const getArticle = (params: any) => {
+    const { uid } = params;
+    let _sql = '';
+    if (uid) {
+        _sql = `select * from article where uid=${uid} and ispublic=1 order by time desc`
+    } else {
+        _sql = `select * from article where ispublic=1 order by time desc`
+    }
+    return query(_sql);
+}
 
 export {
     register,
@@ -107,5 +117,7 @@ export {
     getuser,
     online,
     offline,
-    whoOnline
+    whoOnline,
+    sendArticle,
+    getArticle
 }

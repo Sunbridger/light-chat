@@ -2,7 +2,7 @@ import Koa from 'koa';
 import koaBody from 'koa-body';
 import Router from 'koa-router';
 import cors from 'koa2-cors';
-import { register, login, userInfo, savemsg, getmsgoto, getuser, online, offline, whoOnline } from './data';
+import { register, login, userInfo, savemsg, getmsgoto, getuser, online, offline, whoOnline, sendArticle, getArticle } from './data';
 import fs from 'fs';
 import path from 'path'; 
 import request from 'request';
@@ -83,11 +83,17 @@ router.post('/addimg', async (ctx: any) => {
     ctx.body = data;
 }).post('/whoOnline', async (ctx: any) => {
     let { uid } = ctx.request.body;
-    let obj: any = await whoOnline(uid);
-    let data = obj.data;
-    // let data2 = obj.data2;
+    let data: any = await whoOnline(uid);
     data = data.map((el: any)=> el.uid);
     ctx.body = data
+}).post('/sendArticle', async (ctx: any) => {
+    let { user , ispublic, article} = ctx.request.body;
+    const data = await sendArticle({ user , ispublic, article });
+    ctx.body = !!data;
+}).post('/getArticle', async (ctx: any) => {
+    let { uid } = ctx.request.body;
+    const data = await getArticle({ uid });
+    ctx.body = data;
 }).get('/', async (ctx: any) => {
     ctx.body = 'ok';
 })

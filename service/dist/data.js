@@ -109,10 +109,25 @@ const getAllMsgHasMe = (uid) => __awaiter(this, void 0, void 0, function* () {
 });
 const whoOnline = (uid) => __awaiter(this, void 0, void 0, function* () {
     const _sql = `select uid from user where online=1 and uid!=${uid}`;
-    // const data2 = await getAllMsgHasMe(uid);
-    const data = yield query(_sql);
-    return {
-        data,
-    };
+    return query(_sql);
 });
 exports.whoOnline = whoOnline;
+const sendArticle = (params) => {
+    const { user, ispublic, article } = params;
+    const { uid, name, avatar } = user;
+    const _sql = `insert into article (uid, name, avatar,article,ispublic ) value(${uid},'${name}','${avatar}','${article}', ${ispublic})`;
+    return query(_sql);
+};
+exports.sendArticle = sendArticle;
+const getArticle = (params) => {
+    const { uid } = params;
+    let _sql = '';
+    if (uid) {
+        _sql = `select * from article where uid=${uid} and ispublic=1 order by time desc`;
+    }
+    else {
+        _sql = `select * from article where ispublic=1 order by time desc`;
+    }
+    return query(_sql);
+};
+exports.getArticle = getArticle;
