@@ -33,11 +33,11 @@ app.use(KoaStatic(staticPath))
 router.post('/addimg', async (ctx: any) => {
     const file = ctx.request.files.file;	// 获取上传文件 imgfile 为前端自定义
     const reader = fs.createReadStream(file.path);	// 创建读流
-    let filePath = path.resolve(__dirname, 'upload/') + `/${file.name}`;
+    let filePath = path.resolve(__dirname, 'upload/imgs/') + `/${file.name}`;
     const upStream = fs.createWriteStream(filePath);
     reader.pipe(upStream);
     ctx.body = {
-        url: file.name
+        url: 'imgs/' + file.name
     }
 }).get('/emotions', async (ctx: any) => {
     await requestGet('https://api.weibo.com/2/emotions.json?source=1362404091').then(res => {

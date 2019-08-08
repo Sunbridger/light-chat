@@ -1,16 +1,15 @@
 import axios from 'axios';
 import socket from 'socket.io-client';
 
-import Global from '../../global.js';
-const io = socket(Global.replace('http', 'ws'));
+const io = socket('wss://2261295nz5.51mypc.cn');
+const productionBase = 'https://2261295nz5.51mypc.cn';
 
-console.log(io, 'io')
 export const get = (url, opt = {}) => {
-    return axios.get('/api' + url, opt);
+    return axios.get(productionBase  + url, opt);
 }
 
 export const post = (url, opt = {}) => {
-    return axios.post('/api' + url, opt);
+    return axios.post(productionBase  + url, opt);
 }
 
 export const wsEmit = (type, msg, fn) => {

@@ -73,7 +73,6 @@ export default {
         },
         submit() {
             if (!this.content) return;
-            console.log(this.myUid,'asdasd')
             const ct = this.content;
             this.content = '';
             const sender = {

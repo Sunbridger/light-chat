@@ -26,7 +26,7 @@ export default {
                 if (this.$route.name !== 'chat') {
                     const key = uid + '-' + sender.uid;
                     let num = this.getStroage(key) || 0;
-                    if (!num) {
+                    if (!num || num == null) {
                         this.saveStroage({
                             [key]: ++num
                         });

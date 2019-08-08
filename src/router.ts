@@ -3,14 +3,13 @@ import Router from 'vue-router';
 import Login from 'view/login.vue';
 import Register from 'view/register.vue';
 import Chat from 'view/chat.vue';
-import Home from 'view/home.vue'
+import Home from 'view/Home.vue'
 
 Vue.use(Router);
 
 
 const router = new Router({
-  mode: 'history',
-  base: process.env.BASE_URL,
+  mode: 'hash',
   routes: [
     {
       path: '/',
@@ -44,7 +43,6 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-    console.log(to, from,'-')
     if (window.localStorage.uid) {
         if (to.name == 'chat' && to.params.uid) {
             next()
