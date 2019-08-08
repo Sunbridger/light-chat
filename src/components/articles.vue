@@ -17,6 +17,7 @@
                     <div class="article-box-bottom">
                         <span>{{row.time | format}}</span>
                         <span v-if="row.onlyMe" class="el-icon-s-goods">仅自己可见</span>
+                        <span v-if="row.uid == uid" class="del" @click="delArticle(row.aid)">删除</span>
                     </div>
                 </div>
             </div>
@@ -36,13 +37,16 @@ export default {
         }
     },
     created() {
-        this.changeLoading(true)
-        this.getArticle();
+        this.init()
     },
     methods: {
         ...mapMutations([
             'changeLoading'
         ]),
+        init() {
+            this.changeLoading(true)
+            this.getArticle();
+        },
         getArticle() {
             post('/getArticle').then(({data}) => {
                 this.changeLoading()
@@ -62,6 +66,26 @@ export default {
             this.$router.push({
                 name: 'home'
             })
+        },
+        delArticle(aid) {
+            this.$alert('是否删除该动态', '提示', {
+                confirmButtonText: '确定',
+                callback: action => {
+                    if (action == 'confirm') {
+                        post('/delArticle', { aid }).then(res => {
+                            if (res) {
+                                this.$message({
+                                    message: '删除成功',
+                                    type: 'success'
+                                })
+                            } else {
+                                this.$message.error('失败请重试！');
+                            }
+                            this.init()
+                        })
+                    }
+                }
+            });
         }
     },
     filters: {
@@ -147,7 +171,14 @@ export default {
             .el-icon-s-goods {
                 margin-left: 10px;
             }
+            .del {
+                float: right;
+                margin-top: 5px;
+            }
         }
     }
+}
+.el-message-box {
+    width: 80%!important;
 }
 </style>

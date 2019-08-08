@@ -131,3 +131,9 @@ const getArticle = (params) => {
     return query(_sql);
 };
 exports.getArticle = getArticle;
+const delArticle = (params) => {
+    let { aid } = params;
+    const _sql = `delete from article where aid=${aid}`;
+    return query(_sql);
+};
+exports.delArticle = delArticle;

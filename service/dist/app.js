@@ -108,6 +108,10 @@ router.post('/addimg', (ctx) => __awaiter(this, void 0, void 0, function* () {
     let { uid } = ctx.request.body;
     const data = yield data_1.getArticle({ uid });
     ctx.body = data;
+})).post('/delArticle', (ctx) => __awaiter(this, void 0, void 0, function* () {
+    let { aid } = ctx.request.body;
+    const data = yield data_1.delArticle({ aid });
+    ctx.body = !!data;
 })).get('/', (ctx) => __awaiter(this, void 0, void 0, function* () {
     ctx.body = 'ok';
 }));

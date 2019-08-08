@@ -107,7 +107,11 @@ const getArticle = (params: any) => {
     }
     return query(_sql);
 }
-
+const delArticle = (params: any) => {
+    let { aid } = params;
+    const _sql = `delete from article where aid=${aid}`;
+    return query(_sql);
+};
 export {
     register,
     login,
@@ -119,5 +123,6 @@ export {
     offline,
     whoOnline,
     sendArticle,
-    getArticle
+    getArticle,
+    delArticle
 }

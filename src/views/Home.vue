@@ -157,7 +157,7 @@ export default {
     width: 50px;
     height: 50px;
     line-height: 50px;
-    bottom: 43px;
+    bottom: 66px;
     border-radius: 50%;
     background-color: rgba(220,220,221,.5);
     right: 0;

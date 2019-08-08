@@ -13,7 +13,8 @@ import {
     Loading,
     Message,
     Badge,
-    Switch
+    Switch,
+    MessageBox
 } from 'element-ui'
 
 Vue.use(Button);
@@ -29,6 +30,6 @@ Vue.use(Upload);
 Vue.use(Badge);
 Vue.use(Switch);
 Vue.prototype.$message = Message;
-
+Vue.prototype.$alert = MessageBox.alert;
 Vue.prototype.$loading = Loading.service;
 Vue.use(Loading.directive);
