@@ -5,7 +5,7 @@ const resolve = dir => path.join(__dirname, dir);
 const target = 'http://192.168.249.100:3000/';
 const publicPath = './dist';
 module.exports = {
-  publicPath,
+//   publicPath,
   devServer: {
     proxy: {
       '/api': {
@@ -18,6 +18,7 @@ module.exports = {
       },
     },
   },
+  
   configureWebpack: (config) => {
     // if (process.env.NODE_ENV === 'production') {
       config.mode = 'production';
@@ -29,6 +30,7 @@ module.exports = {
       '@': resolve('./src'),
       'view': resolve('./src/views'),
       'api': resolve('./src/api'),
+      'assets': resolve('./src/assets') 
     };
   },
 };

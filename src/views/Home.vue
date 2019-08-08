@@ -1,101 +1,91 @@
 <template>
-    <div>
+    <div 
+        v-loading="loading"
+        element-loading-text="拼命加载中"
+        element-loading-spinner="el-icon-loading"
+        element-loading-background="rgba(220, 220, 220, 0.8)">
         <div class="nav-top">
-            <p class="nav-p-t">
+            <p class="nav-p-t" @click="exit">
                 欢迎您<span>{{title}}</span>
             </p>
-            <p class="nav-p" @click="exit">
-                <el-switch
-                    v-model="value"
-                    active-color="#13ce66"
-                    inactive-color="#ff4949">
-                </el-switch>
+            <p class="nav-p" @click="writeArtic">
+                <i class="el-icon-circle-plus-outline"></i>
             </p>
         </div>
         <div v-if="tabName === 'friends'" class="content-box">
-            <div v-for="friend in friends" :key="friend.uid" class="flex" @click="getChat(friend)">
-                <el-badge :hidden="getNum(friend.uid)" is-dot  class="item">    
-                    <el-avatar shape="square" :size="50" :src="friend.avatar"></el-avatar>
-                </el-badge>
-                <p class="flex1">{{friend.name}}</p>
-                <p v-if="onlineFn(friend.uid)" class="font-grenn">在线</p>
-                <p v-else class="font-red">离线</p>
-            </div>
+            <friends></friends>
         </div>
-        <div v-if="tabName === 'xxx'">
-            ...开发中
+        <div v-if="tabName === 'dynamic'" class="content-box">
+            <articles></articles>
         </div>
         <div class="nav-bottom">
-            <p v-for="(tab, index) in item" :key="index" class="nav-p" :class="{active: tab.active}" @click="tabSelect(index, tab.tabName)">
+            <p v-for="(tab, index) in item" :key="tab.value" class="nav-p" :class="{active: tab.active}" @click="tabSelect(index, tab.tabName)">
                 <i :class="tab.icon"></i>{{tab.value}}
             </p>
         </div>
+        <span class="upbox" @click="up">
+            <i class="el-icon-upload2 "></i>
+        </span>
     </div>
 </template>
 
 
 <script>
-import { wsEmit, wsOn, post } from 'api';
-import { mapActions, mapGetters } from 'vuex';
-const item = [
-    {
-        value: '我的好友',
-        active: true,
-        icon: 'el-icon-user-solid',
-        tabName: 'friends'
-    },
-    {
-        value: '待开发',
-        active: false,
-        icon: 'el-icon-upload',
-        tabName: 'xxx'
-    },
-]
+import { wsEmit } from 'api';
+import Articles from 'component/articles.vue';
+import Friends from 'component/friends.vue';
 
 export default {
     name: 'home',
     data() {
         return {
-            item: Object.assign([], item),
-            tabName: 'friends',
-            value:'',
-            onlineFriends: [],
+            item: [
+                {
+                    value: '我的好友',
+                    active: true,
+                    icon: 'el-icon-user-solid',
+                    tabName: 'friends'
+                },{
+                    value: '好友动态',
+                    active: false,
+                    icon: 'el-icon-s-help',
+                    tabName: 'dynamic'
+                }
+            ],
+            title: window.localStorage.name,
             uid: window.localStorage.uid,
-            title: window.localStorage.name
+            tabName: 'friends'
         };
     },
     computed: {
-        friends() {
-            return this.$store.state.friends;
+        loading() {
+            return this.$store.state.loading
         }
     },
     created() {
         wsEmit('online', this.uid);
-        this.getFriends({uid: this.uid});
-        this.getWhoOnline();
     },
     methods: {
-        ...mapActions([
-            'getFriends',
-        ]),
-        getNum(uid) {
-            const key = this.uid + '-' + uid;
-            let num = this.getStroage(key);
-            return !num;
-        },
-        getWhoOnline() {
-            post('/whoOnline', {uid: this.uid}).then(({data}) => {
-                this.onlineFriends = data;
-            })
-        },
         exit() {
-            ['avatar', 'name', 'uid'].forEach(el => {
-                window.localStorage.removeItem(el);
-            })
-            wsEmit('offline', this.uid)
-            this.$router.push({
-                name: 'login'
+            this.$alert('是否退出登陆', '提示', {
+                confirmButtonText: '确定',
+                callback: action => {
+                    if (action == 'confirm') {
+                        ['avatar', 'name', 'uid'].forEach(el => {
+                            window.localStorage.removeItem(el);
+                        })
+                        wsEmit('offline', this.uid)
+                        this.$router.push({
+                            name: 'login'
+                        });        
+                    }
+                }
             });
+        },
+        writeArtic() {
+            this.$router.push({
+                name: 'write'
+            })
         },
         tabSelect(index, name) {
             this.item.forEach((el, ind) => {
@@ -107,74 +97,81 @@ export default {
             });
             this.tabName = name;
         },
-        getChat(friend) {
-            this.$router.push({
-                name: 'chat',
-                params: friend
-            })
-        },
-        onlineFn(uid) {
-            return this.onlineFriends.includes(uid);
+        up() {
+            window.scrollTo({ 
+                top: 0, 
+                behavior: "smooth" 
+            });
         }
     },
+    components: {
+        Articles,
+        Friends
+    }
 };
 </script>
 
 <style lang="less">
+.el-loading-mask {
+    position: fixed!important;
+}
 .nav-top {
-    color: #303133;
     position: fixed;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    box-sizing: border-box; 
     background-color: #e2dfdf;
     top: 0;
     width: 100%;
-    height: 38px;
+    height: 50px;
     z-index: 2;
+    p {
+        margin: 0;
+    }
     .nav-p-t {
-        float: left;
-        margin: 8px 0 0 10px;
+        font-size: 14px;
+        color: #67C23A;
+        line-height: 32px;
     }
     .nav-p {
-        margin: 0;
-        margin: 5px 10px 0 0;
-        float: right;
+        font-size: 25px;
     }
 }
 .content-box {
-    padding: 10px;
-    margin-top: 38px;
-    .flex {
-        display: flex;
-        margin-bottom: 20px;
-        .flex1 {
-            flex: 1;
-            margin: 0 0 0 10px;
-            line-height: 50px;
-            border-bottom: 1px solid #ccc;
-        }
-        .font-red {
-            color: #909399;
-        }
-        .font-grenn {
-            color: #67C23A;
-        }
-    }
+    padding: 10px 10px 50px 10px;
+    margin-top: 50px;
 }
 .nav-bottom {
     position: fixed;
     bottom: 0;
     width: 100%;
-    background-color: #DCDFE6;
+    background-color: #e2dfdf;
     display: flex;
     justify-content: space-around;
     .nav-p {
         flex: 1;
         text-align: center;
         margin: 0;
-        height: 38px;
-        line-height: 38px;
+        height: 50px;
+        line-height: 50px;
+        font-weight: 100;
     }
     .active {
-        background-color: #409EFF;
+        background-color: #67C23A;
+        color: white;
     }
+}
+.upbox {
+    display: block;
+    position: fixed;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    bottom: 80px;
+    border-radius: 50%;
+    background-color: rgba(220,220,221,.5);
+    right: 0;
+    text-align: center;
 }
 </style>

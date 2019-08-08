@@ -26,20 +26,13 @@ export default {
                 if (this.$route.name !== 'chat') {
                     const key = uid + '-' + sender.uid;
                     let num = this.getStroage(key) || 0;
-                    if (!num || num == null) {
-                        this.saveStroage({
-                            [key]: ++num
-                        });
-                        location.reload(); 
-                    } else {
-                        this.$message({
-                            message: `${sender.name}发来一条新消息`,
-                            type: 'success'
-                        })
-                    }
-                    // this.saveStroage({
-                    //     [key]: ++num
-                    // });
+                    this.$message({
+                        message: `${sender.name}发来一条新消息`,
+                        type: 'success'
+                    })
+                    this.saveStroage({
+                        [key]: ++num
+                    });
                 } else {
                     this.getShouldShowMsg({
                         uid1: uid,
@@ -97,5 +90,9 @@ export default {
         margin: 0;
         padding: 0;
         overscroll-behavior-y: contain;
+        &::-webkit-scrollbar{
+            width: 0;
+            height: 0;
+        }
     }
 </style>

@@ -8,7 +8,8 @@ const friends: any[] = [];
 export default new Vuex.Store({
     state: {
         friends,
-        shouldShowMsg
+        shouldShowMsg,
+        loading: true
     },
     mutations: {
         changeFriends(state, data) {
@@ -21,6 +22,9 @@ export default new Vuex.Store({
                 state.shouldShowMsg.push(data);
             }
         },
+        changeLoading(state,flag = false) {
+            state.loading = flag;
+        } 
     },
     actions: {
         async getFriends(store, params) {

@@ -66,12 +66,13 @@ const savemsg = (params: {from: number, to: number, msg: string}) => {
 
 const getmsgoto = (params: {uid1: number, uid2: number}) => {
     const { uid1, uid2 } = params;
-    const _sql = `select * from chatmsg where (fromuid=${uid1} and touid=${uid2}) or (fromuid=${uid2} and touid=${uid1}) order by time asc`;
+    const _sql = `select * from chatmsg where (fromuid=${uid1} and touid=${uid2}) or (fromuid=${uid2} and touid=${uid1})  order by time asc`;
     return query(_sql);
 };
 const getuser = (params: {uid: number}) => {
     const { uid } = params;
-    const _sql = `select * from user where uid!=${uid} order by time desc`;
+    // limit 0,20 
+    const _sql = `select name,online,avatar,uid from user where uid!=${uid} order by time desc,online desc`;
     return query(_sql);
 }
 const online = (uid: number) => {
@@ -88,15 +89,29 @@ const getAllMsgHasMe = async (uid: number) => {
 }
 const whoOnline = async (uid: number) => {
     const _sql = `select uid from user where online=1 and uid!=${uid}`;
-    // const data2 = await getAllMsgHasMe(uid);
-    const data = await query(_sql);
-    return {
-        data,
-        // data2
-    }
+    return query(_sql);
 };
-
-
+const sendArticle = (params: {ispublic: number; article: string; user: {uid: number; name: string; avatar: string}}) => {
+    const { user , ispublic, article} = params; 
+    const { uid, name, avatar } = user;
+    const _sql = `insert into article (uid, name, avatar,article,ispublic ) value(${uid},'${name}','${avatar}','${article}', ${ispublic})`
+    return query(_sql);
+};
+const getArticle = (params: any) => {
+    const { uid } = params;
+    let _sql = '';
+    if (uid) {
+        _sql = `select * from article where uid=${uid} and ispublic=0 order by time desc`
+    } else {
+        _sql = `select * from article order by time desc`
+    }
+    return query(_sql);
+}
+const delArticle = (params: any) => {
+    let { aid } = params;
+    const _sql = `delete from article where aid=${aid}`;
+    return query(_sql);
+};
 export {
     register,
     login,
@@ -106,5 +121,8 @@ export {
     getuser,
     online,
     offline,
-    whoOnline
+    whoOnline,
+    sendArticle,
+    getArticle,
+    delArticle
 }

@@ -82,13 +82,14 @@ const savemsg = (params) => {
 exports.savemsg = savemsg;
 const getmsgoto = (params) => {
     const { uid1, uid2 } = params;
-    const _sql = `select * from chatmsg where (fromuid=${uid1} and touid=${uid2}) or (fromuid=${uid2} and touid=${uid1}) order by time asc`;
+    const _sql = `select * from chatmsg where (fromuid=${uid1} and touid=${uid2}) or (fromuid=${uid2} and touid=${uid1})  order by time asc`;
     return query(_sql);
 };
 exports.getmsgoto = getmsgoto;
 const getuser = (params) => {
     const { uid } = params;
-    const _sql = `select * from user where uid!=${uid} order by time desc`;
+    // limit 0,20 
+    const _sql = `select name,online,avatar,uid from user where uid!=${uid} order by time desc,online desc`;
     return query(_sql);
 };
 exports.getuser = getuser;
@@ -108,10 +109,31 @@ const getAllMsgHasMe = (uid) => __awaiter(this, void 0, void 0, function* () {
 });
 const whoOnline = (uid) => __awaiter(this, void 0, void 0, function* () {
     const _sql = `select uid from user where online=1 and uid!=${uid}`;
-    // const data2 = await getAllMsgHasMe(uid);
-    const data = yield query(_sql);
-    return {
-        data,
-    };
+    return query(_sql);
 });
 exports.whoOnline = whoOnline;
+const sendArticle = (params) => {
+    const { user, ispublic, article } = params;
+    const { uid, name, avatar } = user;
+    const _sql = `insert into article (uid, name, avatar,article,ispublic ) value(${uid},'${name}','${avatar}','${article}', ${ispublic})`;
+    return query(_sql);
+};
+exports.sendArticle = sendArticle;
+const getArticle = (params) => {
+    const { uid } = params;
+    let _sql = '';
+    if (uid) {
+        _sql = `select * from article where uid=${uid} and ispublic=0 order by time desc`;
+    }
+    else {
+        _sql = `select * from article order by time desc`;
+    }
+    return query(_sql);
+};
+exports.getArticle = getArticle;
+const delArticle = (params) => {
+    let { aid } = params;
+    const _sql = `delete from article where aid=${aid}`;
+    return query(_sql);
+};
+exports.delArticle = delArticle;
