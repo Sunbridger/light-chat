@@ -66,12 +66,13 @@ const savemsg = (params: {from: number, to: number, msg: string}) => {
 
 const getmsgoto = (params: {uid1: number, uid2: number}) => {
     const { uid1, uid2 } = params;
-    const _sql = `select * from chatmsg where (fromuid=${uid1} and touid=${uid2}) or (fromuid=${uid2} and touid=${uid1}) order by time asc`;
+    const _sql = `select * from chatmsg where (fromuid=${uid1} and touid=${uid2}) or (fromuid=${uid2} and touid=${uid1})  order by time asc`;
     return query(_sql);
 };
 const getuser = (params: {uid: number}) => {
     const { uid } = params;
-    const _sql = `select * from user where uid!=${uid} order by time desc`;
+    // limit 0,20 
+    const _sql = `select name,online,avatar,uid from user where uid!=${uid} order by time desc`;
     return query(_sql);
 }
 const online = (uid: number) => {
