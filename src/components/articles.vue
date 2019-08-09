@@ -15,7 +15,7 @@
                         <pre>{{row.article}}</pre>
                         <div v-if="row.imgs" class="img-box">
                             <div v-for="(src, index) in row.imgs" :key="index">
-                                <img :src="src" alt=""  class="img">
+                                <img :src="src" alt=""  :class="dymclass(row.imgs.length)">
                             </div>
                         </div>
                     </div>
@@ -48,6 +48,14 @@ export default {
         ...mapMutations([
             'changeLoading'
         ]),
+        dymclass(len) {
+            switch (len) {
+                case 1:
+                    return false;
+                default:
+                    return 'img';
+            }
+        },
         init() {
             this.changeLoading(true)
             this.getArticle();
@@ -168,6 +176,7 @@ export default {
         }
         .article-box-mid {
             margin-left: 40px;
+            overflow: hidden;
             pre {
                 font-weight: 200;
                 font-size: 15px;
