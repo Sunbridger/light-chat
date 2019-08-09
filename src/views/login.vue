@@ -20,9 +20,7 @@
 </template>
 <script>
 import { get, post, wsEmit, wsOn } from 'api';
-import Global from '../../global.js';
 import { mapMutations } from 'vuex';
-const serviceImg = Global + 'addimg';
 
 export default {
     name: 'login',
@@ -41,7 +39,7 @@ export default {
                 this.$message({
                     message: '请填写账号或密码',
                     type: 'warning',
-                    duration: 1500
+                    duration: 700
                 })
             } else {
                 this.clearStorage();
@@ -58,7 +56,7 @@ export default {
                         this.$message({
                             message: data.msg,
                             type: 'error',
-                            duration: 1500
+                            duration: 700
                         })
                     }
                 })

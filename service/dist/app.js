@@ -101,8 +101,8 @@ router.post('/addimg', (ctx) => __awaiter(this, void 0, void 0, function* () {
     data = data.map((el) => el.uid);
     ctx.body = data;
 })).post('/sendArticle', (ctx) => __awaiter(this, void 0, void 0, function* () {
-    let { user, ispublic, article } = ctx.request.body;
-    const data = yield data_1.sendArticle({ user, ispublic, article });
+    let { user, ispublic, article, imgs } = ctx.request.body;
+    const data = yield data_1.sendArticle({ user, ispublic, article, imgs });
     ctx.body = !!data;
 })).post('/getArticle', (ctx) => __awaiter(this, void 0, void 0, function* () {
     let { uid } = ctx.request.body;

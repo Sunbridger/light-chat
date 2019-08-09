@@ -91,10 +91,10 @@ const whoOnline = async (uid: number) => {
     const _sql = `select uid from user where online=1 and uid!=${uid}`;
     return query(_sql);
 };
-const sendArticle = (params: {ispublic: number; article: string; user: {uid: number; name: string; avatar: string}}) => {
-    const { user , ispublic, article} = params; 
+const sendArticle = (params: {ispublic: number; imgs: string; article: string; user: {uid: number; name: string; avatar: string}}) => {
+    const { user , ispublic, article, imgs = '' } = params; 
     const { uid, name, avatar } = user;
-    const _sql = `insert into article (uid, name, avatar,article,ispublic ) value(${uid},'${name}','${avatar}','${article}', ${ispublic})`
+    const _sql = `insert into article (uid, name, avatar,article,ispublic,imgs ) value(${uid},'${name}','${avatar}','${article}', ${ispublic},'${imgs}')`
     return query(_sql);
 };
 const getArticle = (params: any) => {

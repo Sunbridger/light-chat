@@ -14,6 +14,20 @@
                 :autosize="{ minRows: 4, maxRows: 12}"
                 v-model="params.article">
             </el-input>
+            <div>
+                <el-upload
+                    :action="serviceImg"
+                    list-type="picture-card"
+                    :limit="6"
+                    :on-preview="handlePictureCardPreview"
+                    :on-error="handleRemoveError"
+                    :on-success="handleRemove">
+                <i class="el-icon-plus"></i>
+                </el-upload>
+                <el-dialog :visible.sync="upimgs.dialogVisible">
+                <img width="80%" :src="upimgs.dialogImageUrl" alt="">
+                </el-dialog>
+            </div>
         </div>
         <div class="bottom-box">
             <el-radio v-model="params.ispublic" :label="0">仅自己可见</el-radio>
@@ -25,12 +39,13 @@
 
 <script>
 import {  post } from 'api';
-// import Global from '../../global.js';
-// const serviceImg = Global + 'addimg';
+import Global from '../../global.js';
+
 
 export default {
     name: 'write',
     data() {
+        const serviceImg = Global + 'addimg';
         return {
             params: {
                 article: '',
@@ -41,7 +56,13 @@ export default {
                     avatar: window.localStorage.avatar
                 }
             },
-            loading: false
+            loading: false,
+            upimgs: {
+                dialogImageUrl: '',
+                dialogVisible: false,
+                imgs: []
+            },
+            serviceImg
         }
     },
     created() {
@@ -61,51 +82,64 @@ export default {
             }
             return flag;
         },
-        tipToast(type, message) {
+        tipToast(type, message, cb) {
             this.$message({
                 message,
-                type
+                type,
+                duration: 700,
+                onClose: () => {
+                    cb()
+                }
             });
         },
         submit() {
             let flag = this.isEmpty(this.params.user);
             if (!flag) {
                 if (!this.params.article.trim()) {
-                    this.tipToast('warning', '内容不能为空哦')
+                    this.$message.warning('内容为空哦～');
                     return;
                 }
                 this.loading = true;
                 this.params.article = this.params.article.replace(/(^\s*)/g, ''); // 去除前后空格
+                if (this.upimgs.imgs.length) {
+                    this.params.imgs = JSON.stringify(this.upimgs.imgs);
+                }
                 post('/sendArticle', {...this.params}).then(({data}) => {
-                    this.loading = false
                     if (data) {
-                        this.$router.push({
-                            name: 'home'
+                        this.tipToast('success', '发表成功快去和好友分享吧～', () => {
+                            this.$router.push({
+                                name: 'home'
+                            })
                         })
+                    } else {
+                        this.loading = false
+                        this.$message.error('发送失败，请重试～');
                     }
                 })
             } else {
-                this.$message.error('当前账号异常，请重新登陆');
-                setTimeout(() => {
+                this.tipToast('error', '当前账号异常，请重新登陆', () => {
                     this.$router.push({
                         name: 'login'
                     })
-                },500)
+                });
             }
         },
         goBack() {
             this.$router.push({
                 name: 'home'
             })
+        },
+        handleRemove(file, fileList) {
+            this.upimgs.imgs.push(file.url);
+        },
+        handleRemoveError() {
+
+        },
+        handlePictureCardPreview(file) {
+            this.upimgs.dialogImageUrl = file.url;
+            this.upimgs.dialogVisible = true;
         }
     },
-    // directives: {
-    //     focus: {
-    //         inserted: function (el) {
-    //             el.getElementsByClassName('el-textarea__inner')[0].focus();
-    //         }
-    //     }
-    // }
 };
 </script>
 
@@ -126,7 +160,7 @@ export default {
     }
     .text-box {
         box-sizing: border-box;
-        margin: 55px 0 5px 0;
+        margin: 55px 0 10px 0;
         padding: 0 10px 0 10px;
         .el-textarea {
             border: 1px solid #DCDFE6;
@@ -139,10 +173,20 @@ export default {
 
             }
         }
+        .el-upload-list__item {
+            width: 100%;
+            margin: 0;
+        }
+        .el-upload--picture-card {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+        }
         
     }
     .bottom-box {
         display: flex;
+        margin-bottom: 10px;
         justify-content: space-around;
         .el-radio {
             line-height: 36px;

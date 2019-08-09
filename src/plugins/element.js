@@ -14,7 +14,8 @@ import {
     Message,
     Badge,
     Switch,
-    MessageBox
+    MessageBox,
+    Dialog
 } from 'element-ui'
 
 Vue.use(Button);
@@ -29,6 +30,7 @@ Vue.use(Radio);
 Vue.use(Upload);
 Vue.use(Badge);
 Vue.use(Switch);
+Vue.use(Dialog);
 Vue.prototype.$message = Message;
 Vue.prototype.$alert = MessageBox.alert;
 Vue.prototype.$loading = Loading.service;

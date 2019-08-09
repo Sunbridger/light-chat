@@ -113,9 +113,9 @@ const whoOnline = (uid) => __awaiter(this, void 0, void 0, function* () {
 });
 exports.whoOnline = whoOnline;
 const sendArticle = (params) => {
-    const { user, ispublic, article } = params;
+    const { user, ispublic, article, imgs = '' } = params;
     const { uid, name, avatar } = user;
-    const _sql = `insert into article (uid, name, avatar,article,ispublic ) value(${uid},'${name}','${avatar}','${article}', ${ispublic})`;
+    const _sql = `insert into article (uid, name, avatar,article,ispublic,imgs ) value(${uid},'${name}','${avatar}','${article}', ${ispublic},'${imgs}')`;
     return query(_sql);
 };
 exports.sendArticle = sendArticle;

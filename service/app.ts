@@ -87,8 +87,8 @@ router.post('/addimg', async (ctx: any) => {
     data = data.map((el: any)=> el.uid);
     ctx.body = data
 }).post('/sendArticle', async (ctx: any) => {
-    let { user , ispublic, article} = ctx.request.body;
-    const data = await sendArticle({ user , ispublic, article });
+    let { user , ispublic, article, imgs } = ctx.request.body;
+    const data = await sendArticle({ user , ispublic, article, imgs });
     ctx.body = !!data;
 }).post('/getArticle', async (ctx: any) => {
     let { uid } = ctx.request.body;
