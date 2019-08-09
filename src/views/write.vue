@@ -19,9 +19,10 @@
                     :action="serviceImg"
                     list-type="picture-card"
                     :limit="4"
+                    :before-remove="delImg"
                     :on-preview="handlePictureCardPreview"
                     :on-error="handleRemoveError"
-                    :on-success="handleRemove">
+                    :on-success="successUp">
                 <i class="el-icon-plus"></i>
                 </el-upload>
                 <el-dialog :visible.sync="upimgs.dialogVisible">
@@ -102,6 +103,7 @@ export default {
                 this.loading = true;
                 this.params.article = this.params.article.replace(/(^\s*)/g, ''); // 去除前后空格
                 if (this.upimgs.imgs.length) {
+                    this.upimgs.imgs = this.upimgs.imgs.map(el => el.url);
                     this.params.imgs = JSON.stringify(this.upimgs.imgs);
                 }
                 post('/sendArticle', {...this.params}).then(({data}) => {
@@ -129,15 +131,22 @@ export default {
                 name: 'home'
             })
         },
-        handleRemove(file, fileList) {
-            this.upimgs.imgs.push(file.url);
+        successUp(file, fileList) {
+            this.upimgs.imgs.push({
+                url: file.url,
+                imgid: fileList.uid
+            });
         },
         handleRemoveError() {
-
+            this.$message.error('图片上传失败，请刷新重试～');
         },
         handlePictureCardPreview(file) {
             this.upimgs.dialogImageUrl = file.url;
             this.upimgs.dialogVisible = true;
+        },
+        delImg(el) {
+            this.upimgs.imgs = this.upimgs.imgs.filter(row => row.imgid != el.uid);
+            console.log(this.upimgs.imgs, '99ad')
         }
     },
 };
