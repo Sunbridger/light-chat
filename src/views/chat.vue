@@ -19,6 +19,8 @@
         </div>
         <div class="box-chat">
            <el-input
+                @focus="autoBottom"
+                ref="chatinput"
                 type="textarea"
                 :autosize="{ minRows: 1, maxRows: 4}"
                 v-model="content">
@@ -72,8 +74,8 @@ export default {
             return  uid == this.myUid
         },
         submit() {
+            this.$refs.chatinput.focus();
             if (!this.content) return;
-            console.log(this.myUid,'asdasd')
             const ct = this.content;
             this.content = '';
             const sender = {
@@ -87,7 +89,7 @@ export default {
                 msg: ct,
                 loading: true,
             });
-            this.autoBottom();
+            // this.autoBottom();
             post('/savemsg', {
                 from: this.myUid,
                 to: this.friend.uid,
@@ -101,10 +103,7 @@ export default {
             })
         },
         autoBottom() {
-            window.scrollTo({ 
-                top: window.screen.height + 9999, 
-                behavior: "smooth" 
-            });
+            window.scrollTo(0, document.body.offsetHeight)
         },
         goBack() {
             this.$router.push({
@@ -138,7 +137,7 @@ export default {
     .content-top {
         padding: 0 8px;
         margin-top: 28px;
-        margin-bottom: 33px;
+        margin-bottom: 100px;
         .row-msg {
             overflow: hidden;
             .fr {

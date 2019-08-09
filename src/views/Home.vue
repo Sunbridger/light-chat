@@ -90,7 +90,7 @@ export default {
         tabSelect(index, name) {
             this.item.forEach((el, ind) => {
                 if (ind === index) {
-                    el.active = true;
+                    el.active = true;  
                 } else {
                     el.active = false;
                 }

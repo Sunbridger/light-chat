@@ -6,6 +6,7 @@
         </div>
         <div class="text-box">
            <el-input
+                ref="textarea"
                 type="textarea"
                 placeholder="这一刻的想法..."
                 :autosize="{ minRows: 4, maxRows: 12}"
@@ -42,7 +43,10 @@ export default {
         }
     },
     created() {
-
+        
+    },
+    mounted() {
+        this.$refs.textarea.focus();
     },
     methods: {
         isEmpty(obj) {
@@ -92,7 +96,14 @@ export default {
                 name: 'home'
             })
         }
-    }
+    },
+    // directives: {
+    //     focus: {
+    //         inserted: function (el) {
+    //             el.getElementsByClassName('el-textarea__inner')[0].focus();
+    //         }
+    //     }
+    // }
 };
 </script>
 

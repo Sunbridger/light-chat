@@ -41,6 +41,7 @@ export default {
                     duration: 1500
                 })
             } else {
+                this.clearStorage();
                 post('/login', this.form).then(({data}) => {
                     if (data.status) {
                         const { uid, avatar,name } = data;
@@ -58,6 +59,11 @@ export default {
                     }
                 })
             }
+        },
+        clearStorage() {
+            ['avatar', 'name', 'uid'].forEach(el => {
+                window.localStorage.removeItem(el);
+            });
         }
     }
 };

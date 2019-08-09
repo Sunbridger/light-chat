@@ -55,6 +55,9 @@ export default {
                 d2 = data.filter(row => row.uid == this.uid && !row.ispublic); // 获取我自己的私有的
                 d2.forEach(el => el.onlyMe = true); // 为我的data打备注
                 d3 = d2.concat(d1);
+                d3.sort((a, b) => {
+                    return Date.parse(b.time) - Date.parse(a.time)
+                }) // TODO：再次排序
                 if (d3.length) {
                     this.articles = d3;
                 } else {
@@ -107,25 +110,25 @@ export default {
             let minC = diffValue/minute;
             if (monthC >= 1) {
                 if (monthC <= 12) {
-                    result='' + parseInt(monthC) + '月前';
+                    result = parseInt(monthC) + '月前';
                 }
                 else{
-                    result='' + parseInt(monthC/12) + '年前';
+                    result = parseInt(monthC/12) + '年前';
                 }
             }
             else if (weekC >= 1) {
-                result='' + parseInt(weekC) + '周前';
+                result = parseInt(weekC) + '周前';
             }
             else if (dayC >= 1) {
-                result=''+ parseInt(dayC) +'天前';
+                result = parseInt(dayC) +' 天前';
             }
             else if (hourC>=1){
-                result=''+ parseInt(hourC) +'小时前';
+                result = parseInt(hourC) + '小时前';
             }
             else if (minC>=1){
-                result=''+ parseInt(minC) +'分钟前';
+                result = parseInt(minC) + '分钟前';
             } else {
-                result='刚刚';
+                result = '刚刚';
             }
             return result;
         }
