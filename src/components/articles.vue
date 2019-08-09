@@ -13,6 +13,11 @@
                     </div>
                     <div class="article-box-mid">
                         <pre>{{row.article}}</pre>
+                        <div v-if="row.imgs" class="img-box">
+                            <div v-for="(src, index) in row.imgs" :key="index">
+                                <img :src="src" alt=""  class="img">
+                            </div>
+                        </div>
                     </div>
                     <div class="article-box-bottom">
                         <span>{{row.time | format}}</span>
@@ -51,6 +56,12 @@ export default {
             post('/getArticle').then(({data}) => {
                 this.changeLoading()
                 let d1, d2, d3;
+                data.forEach(row => {
+                    if (row.imgs) {
+                        row.imgs = JSON.parse(row.imgs);
+                    }
+                    return row;
+                })
                 d1 = data.filter(row => row.ispublic == 1); // 获取所有公开的
                 d2 = data.filter(row => row.uid == this.uid && !row.ispublic); // 获取我自己的私有的
                 d2.forEach(el => el.onlyMe = true); // 为我的data打备注
@@ -151,7 +162,8 @@ export default {
             display: flex;
             p {
                 margin: 0 0 0 5px;
-                line-height: 35px;
+                line-height: 20px;
+                color: #59A9FB;
             }
         }
         .article-box-mid {
@@ -163,6 +175,16 @@ export default {
                 overflow: hidden;
                 white-space: pre-wrap;
                 word-break: break-all;
+            }
+            .img-box {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                margin-top: 5px;
+                .img {
+                    width: 125px;
+                    height: 125px;
+                }
             }
         }
         .article-box-bottom {

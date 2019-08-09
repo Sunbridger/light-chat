@@ -18,7 +18,7 @@
                 <el-upload
                     :action="serviceImg"
                     list-type="picture-card"
-                    :limit="6"
+                    :limit="4"
                     :on-preview="handlePictureCardPreview"
                     :on-error="handleRemoveError"
                     :on-success="handleRemove">
