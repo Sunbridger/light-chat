@@ -20,6 +20,7 @@
                     list-type="picture-card"
                     :limit="4"
                     :before-remove="delImg"
+                    :before-upload="beforeAvatarUpload"
                     :on-preview="handlePictureCardPreview"
                     :on-error="handleRemoveError"
                     :on-success="successUp">
@@ -146,7 +147,17 @@ export default {
         },
         delImg(el) {
             this.upimgs.imgs = this.upimgs.imgs.filter(row => row.imgid != el.uid);
-            console.log(this.upimgs.imgs, '99ad')
+        },
+        beforeAvatarUpload(file) {
+            const isJPG = file.type === 'image/jpeg' || 'image/png' || 'image/jpg';
+            const isLt2M = file.size / 1024 / 1024 < 2;
+            if (!isJPG) {
+                this.$message.error('只支持jpeg|png|jpg格式图片');
+            }
+            if (!isLt2M) {
+                this.$message.error('图片大小不能超过 2MB!');
+            }
+            return isJPG && isLt2M;
         }
     },
 };

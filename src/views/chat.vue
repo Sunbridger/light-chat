@@ -51,8 +51,7 @@ export default {
         }
     },
     created() {
-        this.getmsgoto();
-        this.clearNum();
+        this.init();
     },
     methods: {
         ...mapActions([
@@ -61,6 +60,10 @@ export default {
         ...mapMutations([
             'changeShouldShowMsg'
         ]),
+        init() {
+            this.getmsgoto();
+            this.clearNum();
+        },
         clearNum() {
             const key = this.myUid + '-' + this.friend.uid;
             window.localStorage.removeItem(key);
@@ -133,6 +136,11 @@ export default {
             &::before {
                 font-size: 28px;
             }
+        }
+        .el-icon-more {
+            position: absolute;
+            right: 10px;
+            top: 10px;
         }
     }
     .content-top {

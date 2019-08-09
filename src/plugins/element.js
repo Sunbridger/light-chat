@@ -15,7 +15,7 @@ import {
     Badge,
     Switch,
     MessageBox,
-    Dialog
+    Dialog,
 } from 'element-ui'
 
 Vue.use(Button);
