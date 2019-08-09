@@ -82,7 +82,8 @@ export default {
             const sender = {
                 uid: this.myUid,
                 msg: ct,
-                name: this.myName
+                name: this.myName,
+                avatar: this.myAvatar
             };
             this.changeShouldShowMsg({
                 fromuid: this.myUid,

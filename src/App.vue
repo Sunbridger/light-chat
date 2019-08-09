@@ -13,29 +13,32 @@ import { mapActions, mapMutations } from 'vuex';
 export default {
     data() {
         return {
-            audioCtx: new AudioContext()
+            audioCtx: new AudioContext(),
+            uid: window.localStorage.uid,
+            sender: {},
+            msg: ''
         }
     },
     created() {
-        const uid = window.localStorage.uid;
-        if (uid) {
+        if (this.uid) {
             // 监听给我发私信的事件...
             wsOn('receive-private-chat' ,(sender) => {
+                this.sender = sender;
                 this.audioTip()
-                
                 if (this.$route.name !== 'chat') {
-                    const key = uid + '-' + sender.uid;
+                    const key = this.uid + '-' + sender.uid;
                     let num = this.getStroage(key) || 0;
-                    this.$message({
-                        message: `${sender.name}发来一条新消息`,
+                    const h = this.$createElement;
+                    this.msg = this.$message({
+                        message: h('p' , { on: { click: this.goChat }}, `${sender.name}发来一条新消息`),
                         type: 'success'
-                    })
+                    });
                     this.saveStroage({
                         [key]: ++num
                     });
                 } else {
                     this.getShouldShowMsg({
-                        uid1: uid,
+                        uid1: this.uid,
                         uid2: sender.uid,
                     });
                     window.scrollTo({ 
@@ -54,6 +57,13 @@ export default {
         ...mapActions([
             'getShouldShowMsg'
         ]),
+        goChat() {
+            this.$router.push({
+                name: 'chat',
+                params: this.sender
+            })
+            this.msg.close()
+        },
         audioTip() {
             // 创建音频上下文  
             var audioCtx = this.audioCtx;
