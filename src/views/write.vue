@@ -6,6 +6,8 @@
         </div>
         <div class="text-box">
            <el-input
+                maxlength='1500'
+                show-word-limit
                 ref="textarea"
                 type="textarea"
                 placeholder="这一刻的想法..."

@@ -19,6 +19,7 @@
         </div>
         <div class="box-chat">
            <el-input
+                maxlength='1500'
                 @focus="autoBottom"
                 ref="chatinput"
                 type="textarea"
