@@ -5,7 +5,7 @@ const resolve = dir => path.join(__dirname, dir);
 const target = 'http://192.168.249.100:3000/';
 const publicPath = './dist';
 module.exports = {
-//   publicPath,
+  publicPath,
   devServer: {
     proxy: {
       '/api': {

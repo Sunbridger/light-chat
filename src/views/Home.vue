@@ -112,6 +112,15 @@ export default {
 </script>
 
 <style lang="less">
+body {
+    margin: 0;
+    padding: 0;
+    overscroll-behavior-y: contain;
+    &::-webkit-scrollbar{
+        width: 0;
+        height: 0;
+    }
+}
 .el-loading-mask {
     position: fixed!important;
 }
