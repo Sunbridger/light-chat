@@ -91,7 +91,6 @@ export default {
                 msg: ct,
                 loading: true,
             });
-            // this.autoBottom();
             post('/savemsg', {
                 from: this.myUid,
                 to: this.friend.uid,

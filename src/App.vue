@@ -14,23 +14,31 @@ export default {
     data() {
         return {
             audioCtx: new AudioContext(),
-            uid: window.localStorage.uid,
+            uid: '',
+            tipVoice: '',
             sender: {},
-            msg: ''
+            msg: '',
         }
     },
     created() {
+        this.tipVoice = window.localStorage.tipVoice;
+        this.uid = window.localStorage.uid;
         if (this.uid) {
             // 监听给我发私信的事件...
             wsOn('receive-private-chat' ,(sender) => {
                 this.sender = sender;
-                this.audioTip()
+                if (this.tipVoice == '0') {
+                    navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
+                    navigator.vibrate(1000);
+                } else {
+                    this.audioTip();
+                }
                 if (this.$route.name !== 'chat') {
                     const key = this.uid + '-' + sender.uid;
                     let num = this.getStroage(key) || 0;
                     const h = this.$createElement;
                     this.msg = this.$message({
-                        message: h('p' , { on: { click: this.goChat }}, `${sender.name}发来一条新消息`),
+                        message: h('span' , { on: { click: this.goChat }}, `${sender.name}发来一条新消息`),
                         type: 'success'
                     });
                     this.saveStroage({
@@ -41,10 +49,7 @@ export default {
                         uid1: this.uid,
                         uid2: sender.uid,
                     });
-                    window.scrollTo({ 
-                        top: window.screen.height + 9999, 
-                        behavior: "smooth" 
-                    });
+                    window.scrollTo(0, document.body.offsetHeight)
                 }
             });
 

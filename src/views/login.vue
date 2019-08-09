@@ -7,6 +7,8 @@
             <el-form-item label="密码">
                 <el-input type="password" v-model="form.password"></el-input>
             </el-form-item>
+            <el-radio v-model="tipVoice" :label="1">声音</el-radio>
+            <el-radio v-model="tipVoice" :label="0">震动</el-radio>
             <el-form-item>
                 <el-button type="success" @click="login">登陆</el-button>
                 <el-button type="primary">
@@ -29,7 +31,8 @@ export default {
             form: {
                 name: '', // 姓名
                 password: '', // 密码
-            }
+            },
+            tipVoice: 1
         }
     },
     methods: {
@@ -45,11 +48,12 @@ export default {
                 post('/login', this.form).then(({data}) => {
                     if (data.status) {
                         const { uid, avatar,name } = data;
-                        this.saveStroage({ uid, avatar, name });
+                        const tipVoice = this.tipVoice;
+                        this.saveStroage({ uid, avatar, name, tipVoice });
                         this.$router.push({
                             name: 'home',
-                            // params: 'ok' TODO:利用参数 保证uid的传递？
                         });
+                        location.reload();
                     } else {
                         this.$message({
                             message: data.msg,
@@ -61,7 +65,7 @@ export default {
             }
         },
         clearStorage() {
-            ['avatar', 'name', 'uid'].forEach(el => {
+            ['avatar', 'name', 'uid', 'tipVoice'].forEach(el => {
                 window.localStorage.removeItem(el);
             });
         }
