@@ -1,5 +1,5 @@
 <template>
-    <div class="pg-login">
+    <div>
         <el-form ref="form" :model="form" label-width="60px">
             <el-form-item label="账号">
                 <el-input v-model="form.name"></el-input>
@@ -7,6 +7,10 @@
             <el-form-item label="密码">
                 <el-input type="password" v-model="form.password"></el-input>
             </el-form-item>
+            <div class="cen-tip">
+                <el-radio v-model="tipVoice" :label="1">声音</el-radio>
+                <el-radio v-model="tipVoice" :label="0">震动</el-radio>
+            </div>
             <el-form-item>
                 <el-button type="success" @click="login">登陆</el-button>
                 <el-button type="primary">
@@ -18,9 +22,7 @@
 </template>
 <script>
 import { get, post, wsEmit, wsOn } from 'api';
-import Global from '../../global.js';
 import { mapMutations } from 'vuex';
-const serviceImg = Global + 'addimg';
 
 export default {
     name: 'login',
@@ -29,7 +31,8 @@ export default {
             form: {
                 name: '', // 姓名
                 password: '', // 密码
-            }
+            },
+            tipVoice: 1
         }
     },
     methods: {
@@ -38,26 +41,33 @@ export default {
                 this.$message({
                     message: '请填写账号或密码',
                     type: 'warning',
-                    duration: 1500
+                    duration: 700
                 })
             } else {
+                this.clearStorage();
                 post('/login', this.form).then(({data}) => {
                     if (data.status) {
                         const { uid, avatar,name } = data;
-                        this.saveStroage({ uid, avatar, name });
+                        const tipVoice = this.tipVoice;
+                        this.saveStroage({ uid, avatar, name, tipVoice });
                         this.$router.push({
                             name: 'home',
-                            // params: 'ok' TODO:利用参数 保证uid的传递？
                         });
+                        location.reload();
                     } else {
                         this.$message({
                             message: data.msg,
                             type: 'error',
-                            duration: 1500
+                            duration: 700
                         })
                     }
                 })
             }
+        },
+        clearStorage() {
+            ['avatar', 'name', 'uid', 'tipVoice'].forEach(el => {
+                window.localStorage.removeItem(el);
+            });
         }
     }
 };
@@ -66,6 +76,11 @@ export default {
 <style>
 .el-form {
     padding: 35px;
+}
+.cen-tip {
+    padding-left: 60px;
+    padding-bottom: 40px;
+    
 }
 .avatar-uploader .el-upload {
     border: 1px dashed #d9d9d9;

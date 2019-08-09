@@ -13,6 +13,11 @@
                     </div>
                     <div class="article-box-mid">
                         <pre>{{row.article}}</pre>
+                        <div v-if="row.imgs" class="img-box">
+                            <div v-for="(src, index) in row.imgs" :key="index">
+                                <img :src="src" alt=""  :class="dymclass(row.imgs.length)">
+                            </div>
+                        </div>
                     </div>
                     <div class="article-box-bottom">
                         <span>{{row.time | format}}</span>
@@ -43,6 +48,14 @@ export default {
         ...mapMutations([
             'changeLoading'
         ]),
+        dymclass(len) {
+            switch (len) {
+                case 1:
+                    return false;
+                default:
+                    return 'img';
+            }
+        },
         init() {
             this.changeLoading(true)
             this.getArticle();
@@ -51,10 +64,19 @@ export default {
             post('/getArticle').then(({data}) => {
                 this.changeLoading()
                 let d1, d2, d3;
+                data.forEach(row => {
+                    if (row.imgs) {
+                        row.imgs = JSON.parse(row.imgs);
+                    }
+                    return row;
+                })
                 d1 = data.filter(row => row.ispublic == 1); // 获取所有公开的
                 d2 = data.filter(row => row.uid == this.uid && !row.ispublic); // 获取我自己的私有的
                 d2.forEach(el => el.onlyMe = true); // 为我的data打备注
                 d3 = d2.concat(d1);
+                d3.sort((a, b) => {
+                    return Date.parse(b.time) - Date.parse(a.time)
+                }) // TODO：再次排序
                 if (d3.length) {
                     this.articles = d3;
                 } else {
@@ -107,25 +129,25 @@ export default {
             let minC = diffValue/minute;
             if (monthC >= 1) {
                 if (monthC <= 12) {
-                    result='' + parseInt(monthC) + '月前';
+                    result = parseInt(monthC) + '月前';
                 }
                 else{
-                    result='' + parseInt(monthC/12) + '年前';
+                    result = parseInt(monthC/12) + '年前';
                 }
             }
             else if (weekC >= 1) {
-                result='' + parseInt(weekC) + '周前';
+                result = parseInt(weekC) + '周前';
             }
             else if (dayC >= 1) {
-                result=''+ parseInt(dayC) +'天前';
+                result = parseInt(dayC) +' 天前';
             }
             else if (hourC>=1){
-                result=''+ parseInt(hourC) +'小时前';
+                result = parseInt(hourC) + '小时前';
             }
             else if (minC>=1){
-                result=''+ parseInt(minC) +'分钟前';
+                result = parseInt(minC) + '分钟前';
             } else {
-                result='刚刚';
+                result = '刚刚';
             }
             return result;
         }
@@ -148,11 +170,13 @@ export default {
             display: flex;
             p {
                 margin: 0 0 0 5px;
-                line-height: 35px;
+                line-height: 20px;
+                color: #59A9FB;
             }
         }
         .article-box-mid {
             margin-left: 40px;
+            overflow: hidden;
             pre {
                 font-weight: 200;
                 font-size: 15px;
@@ -160,6 +184,16 @@ export default {
                 overflow: hidden;
                 white-space: pre-wrap;
                 word-break: break-all;
+            }
+            .img-box {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                margin-top: 5px;
+                .img {
+                    width: 125px;
+                    height: 125px;
+                }
             }
         }
         .article-box-bottom {

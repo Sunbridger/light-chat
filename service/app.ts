@@ -37,7 +37,7 @@ router.post('/addimg', async (ctx: any) => {
     const upStream = fs.createWriteStream(filePath);
     reader.pipe(upStream);
     ctx.body = {
-        url: 'imgs/' + file.name
+        url: 'http://192.168.249.102:3000/' + file.name
     }
 }).get('/emotions', async (ctx: any) => {
     await requestGet('https://api.weibo.com/2/emotions.json?source=1362404091').then(res => {
@@ -87,8 +87,8 @@ router.post('/addimg', async (ctx: any) => {
     data = data.map((el: any)=> el.uid);
     ctx.body = data
 }).post('/sendArticle', async (ctx: any) => {
-    let { user , ispublic, article} = ctx.request.body;
-    const data = await sendArticle({ user , ispublic, article });
+    let { user , ispublic, article, imgs } = ctx.request.body;
+    const data = await sendArticle({ user , ispublic, article, imgs });
     ctx.body = !!data;
 }).post('/getArticle', async (ctx: any) => {
     let { uid } = ctx.request.body;

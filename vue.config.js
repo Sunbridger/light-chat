@@ -2,7 +2,7 @@ const path = require('path');
 
 const resolve = dir => path.join(__dirname, dir);
 
-const target = 'http://192.168.249.100:3000/';
+const target = 'https://2261295nz5.51mypc.cn/';
 const publicPath = './dist';
 module.exports = {
   publicPath,

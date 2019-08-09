@@ -52,8 +52,8 @@ export default {
                     tabName: 'dynamic'
                 }
             ],
-            title: window.localStorage.name,
-            uid: window.localStorage.uid,
+            title: '',
+            uid: '',
             tabName: 'friends'
         };
     },
@@ -63,6 +63,8 @@ export default {
         }
     },
     created() {
+        this.title = window.localStorage.name;
+        this.uid = window.localStorage.uid;
         wsEmit('online', this.uid);
     },
     methods: {
@@ -90,7 +92,7 @@ export default {
         tabSelect(index, name) {
             this.item.forEach((el, ind) => {
                 if (ind === index) {
-                    el.active = true;
+                    el.active = true;  
                 } else {
                     el.active = false;
                 }
