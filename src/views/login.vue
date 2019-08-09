@@ -1,5 +1,5 @@
 <template>
-    <div class="pg-login">
+    <div>
         <el-form ref="form" :model="form" label-width="60px">
             <el-form-item label="账号">
                 <el-input v-model="form.name"></el-input>
@@ -7,8 +7,10 @@
             <el-form-item label="密码">
                 <el-input type="password" v-model="form.password"></el-input>
             </el-form-item>
-            <el-radio v-model="tipVoice" :label="1">声音</el-radio>
-            <el-radio v-model="tipVoice" :label="0">震动</el-radio>
+            <div class="cen-tip">
+                <el-radio v-model="tipVoice" :label="1">声音</el-radio>
+                <el-radio v-model="tipVoice" :label="0">震动</el-radio>
+            </div>
             <el-form-item>
                 <el-button type="success" @click="login">登陆</el-button>
                 <el-button type="primary">
@@ -74,6 +76,11 @@ export default {
 <style>
 .el-form {
     padding: 35px;
+}
+.cen-tip {
+    padding-left: 60px;
+    padding-bottom: 40px;
+    
 }
 .avatar-uploader .el-upload {
     border: 1px dashed #d9d9d9;
