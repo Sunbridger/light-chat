@@ -97,7 +97,7 @@ export default {
             this.urlImg = URL.createObjectURL(file.raw); //迅速展示前端👮‍
         },
         beforeAvatarUpload(file) {
-            const isImg = file.type === 'image/jpeg' || 'image/png' || 'image/jpg';
+            const isImg = file.type === ('image/jpeg' || 'image/png' || 'image/jpg');
             const isLt2M = file.size / 1024 / 1024 < 2;
             if (!isImg) {
                 this.$message.error('只支持jpeg|png|jpg格式图片');

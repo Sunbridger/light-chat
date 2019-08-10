@@ -149,7 +149,8 @@ export default {
             this.upimgs.imgs = this.upimgs.imgs.filter(row => row.imgid != el.uid);
         },
         beforeAvatarUpload(file) {
-            const isJPG = file.type === 'image/jpeg' || 'image/png' || 'image/jpg';
+            const isJPG = file.type === ('image/jpeg' || 'image/png' || 'image/jpg');
+            console.log(isJPG,'isJPG')
             const isLt2M = file.size / 1024 / 1024 < 2;
             if (!isJPG) {
                 this.$message.error('只支持jpeg|png|jpg格式图片');
