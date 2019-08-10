@@ -7,7 +7,7 @@
             <el-form-item label="密码" prop="password">
                 <el-input type="password" v-model="form.password"></el-input>
             </el-form-item>
-            <el-form-item label="头像">
+            <el-form-item class="ava" label="头像">
                 <el-upload
                     class="avatar-uploader"
                     :action="serviceImg"
@@ -17,7 +17,8 @@
                     <img v-if="urlImg" :src="urlImg" class="avatar">
                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
-                <el-button class="randomava" icon="el-icon-search" @click="randomAva" circle></el-button>
+                <el-button v-if="!searching" class="randomava" icon="el-icon-search" @click="randomAva" circle></el-button>
+                <span class="el-icon-loading randomava" v-else></span>
             </el-form-item>
             <el-form-item>
                 <el-button
@@ -55,19 +56,24 @@ export default {
             },
             urlImg: '',
             fullscreenLoading: false,
-            serviceImg
+            serviceImg,
+            searching: false
         }
     },
     methods: {
         onRegister(ref) {
             this.$refs[ref].validate(valid => {
-                if (valid) {
+                if (valid && this.urlImg) {
                     this.registerFn();
                 } else {
+                    let message = '请按要求填写信息';
+                    if (!this.urlImg) {
+                        message = '请上传头像或随机生成'
+                    }
                     this.$message({
-                        message: '请按要求填写信息',
+                        message,
                         type: 'warning',
-                        duration: 1500
+                        duration: 1000
                     });
                 }
             })
@@ -111,7 +117,9 @@ export default {
             return isImg && isLt2M;
         },
         randomAva() {
+            this.searching = true;
             axios.get('https://api.uomg.com/api/rand.avatar?format=json').then(({data}) => {
+                this.searching = false;
                 if (data.msg) {
                     this.$message.error(data.msg);
                 } else {

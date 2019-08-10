@@ -23,6 +23,7 @@
                     :before-upload="beforeAvatarUpload"
                     :on-preview="handlePictureCardPreview"
                     :on-error="handleRemoveError"
+                    :on-progress="uping"
                     :on-success="successUp">
                 <i class="el-icon-plus"></i>
                 </el-upload>
@@ -34,7 +35,7 @@
         <div class="bottom-box">
             <el-radio v-model="params.ispublic" :label="0">仅自己可见</el-radio>
             <el-radio v-model="params.ispublic" :label="1">公开</el-radio>
-            <el-button size="medium" type="primary" @click="submit" :disabled="loading" :loading="loading">发送</el-button>
+            <el-button size="medium" type="primary" @click="submit" :disabled="disable" :loading="loading">发送</el-button>
         </div>
     </div>
 </template>
@@ -59,6 +60,7 @@ export default {
                 }
             },
             loading: false,
+            disable: false,
             upimgs: {
                 dialogImageUrl: '',
                 dialogVisible: false,
@@ -66,9 +68,6 @@ export default {
             },
             serviceImg
         }
-    },
-    created() {
-        
     },
     mounted() {
         this.$refs.textarea.focus();
@@ -102,6 +101,7 @@ export default {
                     return;
                 }
                 this.loading = true;
+                this.disable = true;
                 this.params.article = this.params.article.replace(/(^\s*)/g, '').replace(/'/g, '"'); // 去除前后空格
                 if (this.upimgs.imgs.length) {
                     this.upimgs.imgs = this.upimgs.imgs.map(el => el.url);
@@ -116,6 +116,7 @@ export default {
                         })
                     } else {
                         this.loading = false
+                        this.disable = false;
                         this.$message.error('发送失败，请重试～');
                     }
                 })
@@ -133,6 +134,7 @@ export default {
             })
         },
         successUp(file, fileList) {
+            this.disable = false;
             this.upimgs.imgs.push({
                 url: file.url,
                 imgid: fileList.uid
@@ -142,6 +144,7 @@ export default {
             })
         },
         handleRemoveError() {
+            this.disable = false;
             this.$message.error('图片上传失败，请刷新重试～');
         },
         delImg(el) {
@@ -161,7 +164,10 @@ export default {
         handlePictureCardPreview(file) {
             this.upimgs.dialogImageUrl = file.url;
             this.upimgs.dialogVisible = true;
-      }
+        },
+        uping() {
+            this.disable = true;
+        }
 
     },
 };
