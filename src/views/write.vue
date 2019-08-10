@@ -149,12 +149,12 @@ export default {
         },
         beforeAvatarUpload(file) {
             const isJPG = file.type === ('image/jpeg' || 'image/png' || 'image/jpg');
-            const isLt2M = file.size / 1024 / 1024 < 2;
+            const isLt2M = file.size / 1024 / 1024 < 5;
             if (!isJPG) {
                 this.$message.error('只支持jpeg|png|jpg格式图片');
             }
             if (!isLt2M) {
-                this.$message.error('图片大小不能超过 2MB!');
+                this.$message.error('图片大小不能超过 5MB!');
             }
             return isJPG && isLt2M;
         },

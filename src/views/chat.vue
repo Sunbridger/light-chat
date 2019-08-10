@@ -126,7 +126,7 @@ export default {
         position: fixed;
         top: 0;
         z-index: 111;
-        background-color: rgb(226, 223, 223);
+        background-color: #f3f3f3;
         text-align: center;
         line-height: 38px;
         .el-icon-arrow-left {

@@ -51,7 +51,7 @@ export default {
         dymclass(len) {
             switch (len) {
                 case 1:
-                    return false;
+                    return 'imgone';
                 default:
                     return 'img';
             }
@@ -171,7 +171,6 @@ export default {
             p {
                 margin: 0 0 0 5px;
                 line-height: 35px;
-                color: #59A9FB;
             }
         }
         .article-box-mid {
@@ -190,9 +189,12 @@ export default {
                 flex-wrap: wrap;
                 justify-content: space-between;
                 margin-top: 5px;
+                .imgone {
+                    width: 100%;
+                }
                 .img {
-                    width: 125px;
-                    height: 125px;
+                    width: 145px;
+                    height: 145px;
                 }
             }
         }

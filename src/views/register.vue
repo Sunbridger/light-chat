@@ -17,6 +17,7 @@
                     <img v-if="urlImg" :src="urlImg" class="avatar">
                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
+                <el-button class="randomava" icon="el-icon-search" @click="randomAva" circle></el-button>
             </el-form-item>
             <el-form-item>
                 <el-button
@@ -29,7 +30,8 @@
 </template>
 
 <script>
-import { get, post } from 'api';
+import { get, post }  from 'api';
+import axios from 'api';
 import Global from '../../global.js'
 const serviceImg = Global + 'addimg';
 
@@ -71,6 +73,7 @@ export default {
             })
         },
         registerFn() {
+            this.form.avatar = this.urlImg;
             post('/register', this.form).then(({data}) => {
                 this.fullscreenLoading = false;
                 if (data.msg) {
@@ -93,11 +96,11 @@ export default {
             })
         },
         handleAvatarSuccess(res, file) {
-            this.form.avatar = this.service+res.url;
             this.urlImg = URL.createObjectURL(file.raw); //迅速展示前端👮‍
         },
         beforeAvatarUpload(file) {
-            const isImg = file.type === ('image/jpeg' || 'image/png' || 'image/jpg');
+            console.log(file.type)
+            const isImg = (file.type === 'image/png' || file.type === 'image/jpeg');
             const isLt2M = file.size / 1024 / 1024 < 2;
             if (!isImg) {
                 this.$message.error('只支持jpeg|png|jpg格式图片');
@@ -106,6 +109,15 @@ export default {
                 this.$message.error('上传头像图片大小不能超过 2MB!');
             }
             return isImg && isLt2M;
+        },
+        randomAva() {
+            axios.get('https://api.uomg.com/api/rand.avatar?format=json').then(({data}) => {
+                if (data.msg) {
+                    this.$message.error(data.msg);
+                } else {
+                    this.urlImg = data.imgurl;
+                }
+            })
         }
     }
 };
@@ -114,6 +126,11 @@ export default {
 <style>
 .el-form {
     padding: 35px;
+}
+.randomava{
+    position: absolute;
+    top: 6px;
+    left: 70px;
 }
 .avatar-uploader .el-upload {
     border: 1px dashed #d9d9d9;
