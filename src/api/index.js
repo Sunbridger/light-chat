@@ -18,3 +18,5 @@ export const wsEmit = (type, msg, fn) => {
 export const wsOn = (type, callback) => {
     io.on(type, callback)
 }
+
+export default axios;

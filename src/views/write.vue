@@ -6,7 +6,7 @@
         </div>
         <div class="text-box">
            <el-input
-                maxlength='1500'
+                maxlength='300'
                 show-word-limit
                 ref="textarea"
                 type="textarea"
@@ -23,18 +23,19 @@
                     :before-upload="beforeAvatarUpload"
                     :on-preview="handlePictureCardPreview"
                     :on-error="handleRemoveError"
+                    :on-progress="uping"
                     :on-success="successUp">
                 <i class="el-icon-plus"></i>
                 </el-upload>
                 <el-dialog :visible.sync="upimgs.dialogVisible">
-                <img width="80%" :src="upimgs.dialogImageUrl" alt="">
+                <img width="100%" :src="upimgs.dialogImageUrl" alt="">
                 </el-dialog>
             </div>
         </div>
         <div class="bottom-box">
             <el-radio v-model="params.ispublic" :label="0">仅自己可见</el-radio>
             <el-radio v-model="params.ispublic" :label="1">公开</el-radio>
-            <el-button size="medium" type="primary" @click="submit" :disabled="loading" :loading="loading">发送</el-button>
+            <el-button size="medium" type="primary" @click="submit" :disabled="disable" :loading="loading">发送</el-button>
         </div>
     </div>
 </template>
@@ -59,6 +60,7 @@ export default {
                 }
             },
             loading: false,
+            disable: false,
             upimgs: {
                 dialogImageUrl: '',
                 dialogVisible: false,
@@ -66,9 +68,6 @@ export default {
             },
             serviceImg
         }
-    },
-    created() {
-        
     },
     mounted() {
         this.$refs.textarea.focus();
@@ -102,7 +101,8 @@ export default {
                     return;
                 }
                 this.loading = true;
-                this.params.article = this.params.article.replace(/(^\s*)/g, ''); // 去除前后空格
+                this.disable = true;
+                this.params.article = this.params.article.replace(/(^\s*)/g, '').replace(/'/g, '"'); // 去除前后空格
                 if (this.upimgs.imgs.length) {
                     this.upimgs.imgs = this.upimgs.imgs.map(el => el.url);
                     this.params.imgs = JSON.stringify(this.upimgs.imgs);
@@ -116,6 +116,7 @@ export default {
                         })
                     } else {
                         this.loading = false
+                        this.disable = false;
                         this.$message.error('发送失败，请重试～');
                     }
                 })
@@ -133,33 +134,41 @@ export default {
             })
         },
         successUp(file, fileList) {
+            this.disable = false;
             this.upimgs.imgs.push({
                 url: file.url,
                 imgid: fileList.uid
             });
+            this.saveStroage({
+                imgs: JSON.stringify(this.upimgs.imgs)
+            })
         },
         handleRemoveError() {
+            this.disable = false;
             this.$message.error('图片上传失败，请刷新重试～');
-        },
-        handlePictureCardPreview(file) {
-            this.upimgs.dialogImageUrl = file.url;
-            this.upimgs.dialogVisible = true;
         },
         delImg(el) {
             this.upimgs.imgs = this.upimgs.imgs.filter(row => row.imgid != el.uid);
         },
         beforeAvatarUpload(file) {
             const isJPG = file.type === ('image/jpeg' || 'image/png' || 'image/jpg');
-            console.log(isJPG,'isJPG')
-            const isLt2M = file.size / 1024 / 1024 < 2;
+            const isLt2M = file.size / 1024 / 1024 < 5;
             if (!isJPG) {
                 this.$message.error('只支持jpeg|png|jpg格式图片');
             }
             if (!isLt2M) {
-                this.$message.error('图片大小不能超过 2MB!');
+                this.$message.error('图片大小不能超过 5MB!');
             }
             return isJPG && isLt2M;
+        },
+        handlePictureCardPreview(file) {
+            this.upimgs.dialogImageUrl = file.url;
+            this.upimgs.dialogVisible = true;
+        },
+        uping() {
+            this.disable = true;
         }
+
     },
 };
 </script>
@@ -202,6 +211,9 @@ export default {
             width: 100%;
             height: 100%;
             margin: 0;
+        }
+        .el-dialog {
+            width: 100%;
         }
         
     }

@@ -51,7 +51,7 @@ export default {
         dymclass(len) {
             switch (len) {
                 case 1:
-                    return false;
+                    return 'imgone';
                 default:
                     return 'img';
             }
@@ -170,18 +170,17 @@ export default {
             display: flex;
             p {
                 margin: 0 0 0 5px;
-                line-height: 20px;
-                color: #59A9FB;
+                line-height: 35px;
             }
         }
         .article-box-mid {
-            margin-left: 40px;
+            // margin-left: 40px;
             overflow: hidden;
             pre {
                 font-weight: 200;
                 font-size: 15px;
-                margin: 0;
-                overflow: hidden;
+                max-height: 200px;
+                overflow-y: auto;
                 white-space: pre-wrap;
                 word-break: break-all;
             }
@@ -190,14 +189,17 @@ export default {
                 flex-wrap: wrap;
                 justify-content: space-between;
                 margin-top: 5px;
+                .imgone {
+                    width: 100%;
+                }
                 .img {
-                    width: 125px;
-                    height: 125px;
+                    width: 145px;
+                    height: 145px;
                 }
             }
         }
         .article-box-bottom {
-            margin: 5px 0 5px 40px;
+            margin: 5px 0 5px 0;
             span {
                 color: #606266;
                 font-size: 12px;

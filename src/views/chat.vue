@@ -126,7 +126,7 @@ export default {
         position: fixed;
         top: 0;
         z-index: 111;
-        background-color: rgb(226, 223, 223);
+        background-color: #f3f3f3;
         text-align: center;
         line-height: 38px;
         .el-icon-arrow-left {
@@ -202,13 +202,15 @@ export default {
         bottom: 0;
         .el-textarea__inner {
             resize: none;
-            padding: 5px!important;
+            padding: 7px!important;
+            min-height: 40px!important;
+            font-size: 16px;
             &:focus {
                border-color: #44b549!important;
             }
         }
         .el-button {
-            height: 33px!important;
+            height: 40px!important;
             background-color: #3ca940 !important;
             border-radius: 3px!important;
             border: none;

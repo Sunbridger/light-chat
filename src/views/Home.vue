@@ -3,10 +3,11 @@
         v-loading="loading"
         element-loading-text="拼命加载中"
         element-loading-spinner="el-icon-loading"
-        element-loading-background="rgba(220, 220, 220, 0.8)">
+        element-loading-background="rgba(220,220,220)">
         <div class="nav-top">
             <p class="nav-p-t" @click="exit">
-                欢迎您<span>{{title}}</span>
+                <el-avatar shape="circle" :size="35" :src="myavatar"></el-avatar>
+                <span class="name-color">{{title}}</span>
             </p>
             <p class="nav-p" @click="writeArtic">
                 <i class="el-icon-circle-plus-outline"></i>
@@ -19,8 +20,10 @@
             <articles></articles>
         </div>
         <div class="nav-bottom">
-            <p v-for="(tab, index) in item" :key="tab.value" class="nav-p" :class="{active: tab.active}" @click="tabSelect(index, tab.tabName)">
-                <i :class="tab.icon"></i>{{tab.value}}
+            <p v-for="(tab, index) in item" :key="tab.value" class="nav-p"  @click="tabSelect(index, tab.tabName)">
+                <span :class="{active: tab.active}">
+                    <i :class="tab.icon"></i>{{tab.value}}
+                </span>
             </p>
         </div>
         <span class="upbox" @click="up">
@@ -54,6 +57,7 @@ export default {
             ],
             title: '',
             uid: '',
+            myavatar: '',
             tabName: 'friends'
         };
     },
@@ -63,8 +67,10 @@ export default {
         }
     },
     created() {
+        console.log(999)
         this.title = window.localStorage.name;
         this.uid = window.localStorage.uid;
+        this.myavatar = window.localStorage.avatar;
         wsEmit('online', this.uid);
     },
     methods: {
@@ -132,7 +138,7 @@ body {
     justify-content: space-between;
     padding: 10px;
     box-sizing: border-box; 
-    background-color: #e2dfdf;
+    background-color: #f3f3f3;
     top: 0;
     width: 100%;
     height: 50px;
@@ -143,7 +149,12 @@ body {
     .nav-p-t {
         font-size: 14px;
         color: #67C23A;
-        line-height: 32px;
+        display: flex;
+        height: 35px;
+        line-height: 35px;
+        .name-color {
+            margin-left: 5px;
+        }
     }
     .nav-p {
         font-size: 25px;
@@ -152,14 +163,17 @@ body {
 .content-box {
     padding: 10px 10px 50px 10px;
     margin-top: 50px;
+    width: 100%;
+    box-sizing: border-box;
 }
 .nav-bottom {
     position: fixed;
     bottom: 0;
     width: 100%;
-    background-color: #e2dfdf;
+    background-color: white;
     display: flex;
     justify-content: space-around;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.5);
     .nav-p {
         flex: 1;
         text-align: center;
@@ -169,8 +183,7 @@ body {
         font-weight: 100;
     }
     .active {
-        background-color: #67C23A;
-        color: white;
+        color: #409EFF;
     }
 }
 .upbox {
