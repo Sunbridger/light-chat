@@ -3,7 +3,7 @@
         v-loading="loading"
         element-loading-text="拼命加载中"
         element-loading-spinner="el-icon-loading"
-        element-loading-background="rgba(220, 220, 220, 0.8)">
+        element-loading-background="rgba(220,220,220)">
         <div class="nav-top">
             <p class="nav-p-t" @click="exit">
                 欢迎您<span>{{title}}</span>
@@ -123,7 +123,7 @@ export default {
     justify-content: space-between;
     padding: 10px;
     box-sizing: border-box; 
-    background-color: #e2dfdf;
+    background-color: #f3f3f3;
     top: 0;
     width: 100%;
     height: 50px;
@@ -148,7 +148,7 @@ export default {
     position: fixed;
     bottom: 0;
     width: 100%;
-    background-color: #e2dfdf;
+    background-color: #f3f3f3;
     display: flex;
     justify-content: space-around;
     .nav-p {
@@ -175,5 +175,13 @@ export default {
     background-color: rgba(220,220,221,.5);
     right: 0;
     text-align: center;
+}
+.el-loading-spinner {
+    .el-icon-loading {
+        color: #67C23A;
+    }
+    .el-loading-text {
+        color: #67C23A;
+    }
 }
 </style>

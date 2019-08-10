@@ -6,7 +6,7 @@
         </div>
         <div class="text-box">
            <el-input
-                maxlength='1500'
+                maxlength='300'
                 show-word-limit
                 ref="textarea"
                 type="textarea"
@@ -27,7 +27,7 @@
                 <i class="el-icon-plus"></i>
                 </el-upload>
                 <el-dialog :visible.sync="upimgs.dialogVisible">
-                <img width="80%" :src="upimgs.dialogImageUrl" alt="">
+                <img width="100%" :src="upimgs.dialogImageUrl" alt="">
                 </el-dialog>
             </div>
         </div>
@@ -102,7 +102,7 @@ export default {
                     return;
                 }
                 this.loading = true;
-                this.params.article = this.params.article.replace(/(^\s*)/g, ''); // 去除前后空格
+                this.params.article = this.params.article.replace(/(^\s*)/g, '').replace(/'/g, '"'); // 去除前后空格
                 if (this.upimgs.imgs.length) {
                     this.upimgs.imgs = this.upimgs.imgs.map(el => el.url);
                     this.params.imgs = JSON.stringify(this.upimgs.imgs);
@@ -137,13 +137,12 @@ export default {
                 url: file.url,
                 imgid: fileList.uid
             });
+            this.saveStroage({
+                imgs: JSON.stringify(this.upimgs.imgs)
+            })
         },
         handleRemoveError() {
             this.$message.error('图片上传失败，请刷新重试～');
-        },
-        handlePictureCardPreview(file) {
-            this.upimgs.dialogImageUrl = file.url;
-            this.upimgs.dialogVisible = true;
         },
         delImg(el) {
             this.upimgs.imgs = this.upimgs.imgs.filter(row => row.imgid != el.uid);
@@ -158,7 +157,12 @@ export default {
                 this.$message.error('图片大小不能超过 2MB!');
             }
             return isJPG && isLt2M;
-        }
+        },
+        handlePictureCardPreview(file) {
+            this.upimgs.dialogImageUrl = file.url;
+            this.upimgs.dialogVisible = true;
+      }
+
     },
 };
 </script>
@@ -201,6 +205,9 @@ export default {
             width: 100%;
             height: 100%;
             margin: 0;
+        }
+        .el-dialog {
+            width: 100%;
         }
         
     }

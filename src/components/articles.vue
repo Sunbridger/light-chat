@@ -170,18 +170,18 @@ export default {
             display: flex;
             p {
                 margin: 0 0 0 5px;
-                line-height: 20px;
+                line-height: 35px;
                 color: #59A9FB;
             }
         }
         .article-box-mid {
-            margin-left: 40px;
+            // margin-left: 40px;
             overflow: hidden;
             pre {
                 font-weight: 200;
                 font-size: 15px;
-                margin: 0;
-                overflow: hidden;
+                max-height: 200px;
+                overflow-y: auto;
                 white-space: pre-wrap;
                 word-break: break-all;
             }
@@ -197,7 +197,7 @@ export default {
             }
         }
         .article-box-bottom {
-            margin: 5px 0 5px 40px;
+            margin: 5px 0 5px 0;
             span {
                 color: #606266;
                 font-size: 12px;
