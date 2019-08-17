@@ -77,7 +77,6 @@ export default {
         }
     },
     created() {
-        console.log(999)
         this.title = window.localStorage.name;
         this.uid = window.localStorage.uid;
         this.myavatar = window.localStorage.avatar;
