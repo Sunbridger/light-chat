@@ -66,8 +66,12 @@ router.beforeEach((to, from, next) => {
                     name: 'home'
                 })
             }
-        } else {
+        } else if (to.name == 'home' || to.name === 'write') {
             next()
+        } else {
+            next({
+                name: 'home'
+            })
         }
     } else {
         if (to.name == 'login' || to.name == 'register') {
