@@ -63,6 +63,7 @@ export default {
         init() {
             this.getmsgoto();
             this.clearNum();
+            window.scrollTo(0, document.body.offsetHeight)
         },
         clearNum() {
             const key = this.myUid + '-' + this.friend.uid;

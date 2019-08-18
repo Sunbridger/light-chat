@@ -9,14 +9,24 @@
                 <el-avatar shape="circle" :size="35" :src="myavatar"></el-avatar>
                 <span class="name-color">{{title}}</span>
             </p>
+            <!-- <el-dropdown trigger="click">
+                kkkk
+                <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item>黄金糕</el-dropdown-item>
+                    <el-dropdown-item>螺蛳粉</el-dropdown-item>
+                </el-dropdown-menu>
+            </el-dropdown> -->
+
+
+
             <p class="nav-p" @click="writeArtic">
                 <i class="el-icon-circle-plus-outline"></i>
             </p>
         </div>
-        <div v-if="tabName === 'friends'" class="content-box">
+        <div v-show="tabName === 'friends'" class="content-box">
             <friends></friends>
         </div>
-        <div v-if="tabName === 'dynamic'" class="content-box">
+        <div v-show="tabName === 'dynamic'" class="content-box">
             <articles></articles>
         </div>
         <div class="nav-bottom">
@@ -67,7 +77,6 @@ export default {
         }
     },
     created() {
-        console.log(999)
         this.title = window.localStorage.name;
         this.uid = window.localStorage.uid;
         this.myavatar = window.localStorage.avatar;

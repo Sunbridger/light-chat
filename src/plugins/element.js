@@ -16,6 +16,9 @@ import {
     Switch,
     MessageBox,
     Dialog,
+    Dropdown,
+    DropdownItem,
+    DropdownMenu
 } from 'element-ui'
 
 Vue.use(Button);
@@ -31,6 +34,9 @@ Vue.use(Upload);
 Vue.use(Badge);
 Vue.use(Switch);
 Vue.use(Dialog);
+Vue.use(Dropdown);
+Vue.use(DropdownItem);
+Vue.use(DropdownMenu);
 Vue.prototype.$message = Message;
 Vue.prototype.$alert = MessageBox.alert;
 Vue.prototype.$loading = Loading.service;

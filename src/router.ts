@@ -61,12 +61,10 @@ router.beforeEach((to, from, next) => {
         if (to.name == 'chat') {
             if (to.params.uid) {
                 next()
-                fnScrol(window.screen.height + 9999); 
             } else {
                 next({
                     name: 'home'
                 })
-                fnScrol(); 
             }
         } else {
             next()
