@@ -23,10 +23,10 @@
                 <i class="el-icon-circle-plus-outline"></i>
             </p>
         </div>
-        <div v-if="tabName === 'friends'" class="content-box">
+        <div v-show="tabName === 'friends'" class="content-box">
             <friends></friends>
         </div>
-        <div v-if="tabName === 'dynamic'" class="content-box">
+        <div v-show="tabName === 'dynamic'" class="content-box">
             <articles></articles>
         </div>
         <div class="nav-bottom">
