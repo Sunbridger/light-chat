@@ -86,7 +86,6 @@ export default {
             gainNode.gain.linearRampToValueAtTime(2, audioCtx.currentTime + 0.01);
             // 声音走起 
             oscillator.start(audioCtx.currentTime);
-            // 1秒时间内音量从刚刚的1变成0.001，指数变化 
             gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1);
             oscillator.stop(audioCtx.currentTime + 1);
         }
