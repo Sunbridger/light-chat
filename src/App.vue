@@ -76,15 +76,10 @@ export default {
             oscillator.connect(gainNode);
             // 音量和设备关联  
             gainNode.connect(audioCtx.destination);
-            // 音调类型指定为正弦波  
             oscillator.type = 'sine';
-            // 设置音调频率  
             oscillator.frequency.value = 600.00;
-            // 先把当前音量设为0  
             gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
-            // 0.01秒时间内音量从刚刚的0变成1，线性变化 
             gainNode.gain.linearRampToValueAtTime(2, audioCtx.currentTime + 0.01);
-            // 声音走起 
             oscillator.start(audioCtx.currentTime);
             gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1);
             oscillator.stop(audioCtx.currentTime + 1);
