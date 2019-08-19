@@ -70,13 +70,9 @@ export default {
             this.msg.close()
         },
         audioTip() {
-            // 创建音频上下文  
             var audioCtx = this.audioCtx;
-            // 创建音调控制对象  
             var oscillator = audioCtx.createOscillator();
-            // 创建音量控制对象  
             var gainNode = audioCtx.createGain();
-            // 音调音量关联  
             oscillator.connect(gainNode);
             // 音量和设备关联  
             gainNode.connect(audioCtx.destination);
@@ -98,7 +94,6 @@ export default {
     }
 };
 </script>
-
 
 <style lang="less">
     body {
