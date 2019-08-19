@@ -74,7 +74,6 @@ export default {
             var oscillator = audioCtx.createOscillator();
             var gainNode = audioCtx.createGain();
             oscillator.connect(gainNode);
-            // 音量和设备关联  
             gainNode.connect(audioCtx.destination);
             oscillator.type = 'sine';
             oscillator.frequency.value = 600.00;
