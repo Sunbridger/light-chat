@@ -88,7 +88,6 @@ export default {
             oscillator.start(audioCtx.currentTime);
             // 1秒时间内音量从刚刚的1变成0.001，指数变化 
             gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1);
-            // 1秒后停止声音 
             oscillator.stop(audioCtx.currentTime + 1);
         }
     }
