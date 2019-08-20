@@ -55,6 +55,7 @@ export default {
                 ]
             },
             urlImg: '',
+            // realHttpUrlImg: '',
             fullscreenLoading: false,
             serviceImg,
             searching: false
@@ -102,7 +103,8 @@ export default {
             })
         },
         handleAvatarSuccess(res, file) {
-            this.urlImg = URL.createObjectURL(file.raw); //迅速展示前端👮‍
+            // this.urlImg = URL.createObjectURL(file.raw); //迅速展示前端👮‍
+            this.urlImg = res.url;
         },
         beforeAvatarUpload(file) {
             console.log(file.type)

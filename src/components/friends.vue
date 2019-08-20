@@ -40,11 +40,14 @@ export default {
         }
     },
     created() {
-        this.changeLoading(true)
-        this.getFriends({uid: this.uid});
-        this.getWhoOnline();
+        this.init();
     },
     methods: {
+        init() {
+            this.changeLoading(true)
+            this.getFriends({uid: this.uid});
+            this.getWhoOnline();
+        },
         ...mapActions([
             'getFriends',
         ]),

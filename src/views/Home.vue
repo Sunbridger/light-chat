@@ -16,9 +16,6 @@
                     <el-dropdown-item>螺蛳粉</el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown> -->
-
-
-
             <p class="nav-p" @click="writeArtic">
                 <i class="el-icon-circle-plus-outline"></i>
             </p>
@@ -77,12 +74,15 @@ export default {
         }
     },
     created() {
-        this.title = window.localStorage.name;
-        this.uid = window.localStorage.uid;
-        this.myavatar = window.localStorage.avatar;
-        wsEmit('online', this.uid);
+        this.init();
     },
     methods: {
+        init() {
+            this.title = window.localStorage.name;
+            this.uid = window.localStorage.uid;
+            this.myavatar = window.localStorage.avatar;
+            wsEmit('online', this.uid);
+        },
         exit() {
             this.$alert('是否退出登陆', '提示', {
                 confirmButtonText: '确定',
