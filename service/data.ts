@@ -10,7 +10,7 @@ let query = function( sql: string, values?: any ) {
     return new Promise(( resolve, reject ) => {
         pool.getConnection(function(err: any, connection: { query: (arg0: string, arg1: any, arg2: (err: any, rows: any) => void) => void; release: () => void; }) {
             if (err) {
-                resolve(false)
+                resolve(false);
             } else {
                 connection.query(sql, values, ( err, rows) => {
                     if ( err ) {

@@ -2,8 +2,9 @@ const path = require('path');
 
 const resolve = dir => path.join(__dirname, dir);
 
-const target = 'https://2261295nz5.51mypc.cn/';
-const publicPath = './dist';
+// const target = 'https://2261295nz5.51mypc.cn/';
+const target = 'http://121.40.152.167/';
+const publicPath = './';
 module.exports = {
   publicPath,
   devServer: {
