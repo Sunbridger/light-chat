@@ -21,11 +21,11 @@ module.exports = {
   },
   
   configureWebpack: (config) => {
-    // if (process.env.NODE_ENV === 'production') {
+    if (process.env.NODE_ENV === 'production') {
       config.mode = 'production';
-    // } else {
-    //   config.mode = 'development';
-    // }
+    } else {
+      config.mode = 'development';
+    }
     config.resolve.alias = {
       'component': resolve('./src/components'),
       '@': resolve('./src'),
