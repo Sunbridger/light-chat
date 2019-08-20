@@ -24,6 +24,9 @@ export default new Vuex.Store({
         },
         changeLoading(state,flag = false) {
             state.loading = flag;
+        },
+        shouldShowMsgClear(state) {
+            state.shouldShowMsg = [];
         } 
     },
     actions: {
