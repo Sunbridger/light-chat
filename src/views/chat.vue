@@ -6,6 +6,7 @@
         </div>
         <div class="content-top">
             <div class="row-msg" v-for="row in shouldShowMsg" :key="row.id">
+                <center>{{row.time | format}}</center>
                 <p class="top-msg" 
                     :class="{fr: byme(row.fromuid), fl: !byme(row.fromuid)}">
                     <i v-if="row.loading&&byme(row.fromuid)" class="el-icon-loading"></i>
@@ -120,15 +121,45 @@ export default {
         }
     },
     filters: {
-        format(time) {
-            let gett = Date.parse(time);
-            let date = new Date(gett);
-            let Y = date.getFullYear() + '/';
-            let M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '/';
-            let D = date.getDate() + ' ';
-            let h = date.getHours() + ':';
-            let m = date.getMinutes();
-            return Y + M + D + h + m;
+        format(date) {
+            let dateTimeStamp = Date.parse(date);
+            let result;
+            let minute = 1000 * 60;
+            let hour = minute * 60;
+            let day = hour * 24;
+            let halfamonth = day * 15;
+            let month = day * 30;
+            let now = new Date().getTime();
+            let diffValue = now - dateTimeStamp;
+            if (diffValue < 0) return;
+            let monthC = diffValue/month;
+            let weekC = diffValue/(7*day);
+            let dayC = diffValue/day;
+            let hourC = diffValue/hour;
+            let minC = diffValue/minute;
+            if (monthC >= 1) {
+                if (monthC <= 12) {
+                    result = parseInt(monthC) + '月前';
+                }
+                else{
+                    result = parseInt(monthC/12) + '年前';
+                }
+            }
+            else if (weekC >= 1) {
+                result = parseInt(weekC) + '周前';
+            }
+            else if (dayC >= 1) {
+                result = parseInt(dayC) +' 天前';
+            }
+            else if (hourC>=1){
+                result = parseInt(hourC) + '小时前';
+            }
+            else if (minC>=1){
+                result = parseInt(minC) + '分钟前';
+            } else {
+                result = '刚刚';
+            }
+            return result;
         }
     }
     
@@ -161,10 +192,13 @@ export default {
     }
     .content-top {
         padding: 0 8px;
-        margin-top: 28px;
+        margin-top: 38px;
         margin-bottom: 100px;
         .row-msg {
             overflow: hidden;
+            center {
+                color: #909399;
+            }
             .fr {
                 float: right;
                 margin-right: 40px;
