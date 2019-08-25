@@ -22,6 +22,8 @@
             </el-form-item>
             <el-form-item>
                 <el-button
+                    @click="goback">返回</el-button>
+                <el-button
                     type="primary"
                     v-loading.fullscreen.lock="fullscreenLoading"
                     @click="onRegister('form')" plain>提交</el-button>
@@ -62,6 +64,11 @@ export default {
         }
     },
     methods: {
+        goback() {
+            this.$router.push({
+                name: 'login',
+            });
+        },
         onRegister(ref) {
             this.$refs[ref].validate(valid => {
                 if (valid && this.urlImg) {
