@@ -58,12 +58,14 @@ export default {
             'getShouldShowMsg'
         ]),
         ...mapMutations([
-            'changeShouldShowMsg'
+            'changeShouldShowMsg',
+            'shouldShowMsgClear'
         ]),
         init() {
+            this.shouldShowMsgClear();
             this.getmsgoto();
             this.clearNum();
-            window.scrollTo(0, document.body.offsetHeight)
+            setTimeout(this.autoBottom, 500)
         },
         clearNum() {
             const key = this.myUid + '-' + this.friend.uid;
