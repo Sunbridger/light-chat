@@ -34,7 +34,7 @@ export default {
                     this.audioTip();
                 }
                 if (this.$route.name !== 'chat') {
-                    const key = this.uid + '-' + sender.uid;
+                    const key = this.uid + '-' + sender.uid; // 前后端标志uid
                     let num = this.getStroage(key) || 0;
                     const h = this.$createElement;
                     this.msg = this.$message({
