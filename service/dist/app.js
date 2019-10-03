@@ -50,7 +50,7 @@ router.post('/addimg', (ctx) => __awaiter(this, void 0, void 0, function* () {
     const upStream = fs_1.default.createWriteStream(filePath);
     reader.pipe(upStream);
     ctx.body = {
-        url: 'https://2261295nz5.51mypc.cn/imgs/' + file.name
+        url: 'http://localhost:8081/imgs/' + file.name
     };
 })).get('/emotions', (ctx) => __awaiter(this, void 0, void 0, function* () {
     yield requestGet('https://api.weibo.com/2/emotions.json?source=1362404091').then(res => {

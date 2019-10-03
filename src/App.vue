@@ -33,8 +33,27 @@ export default {
                 } else {
                     this.audioTip();
                 }
+                const keychat = this.uid + '=>' + sender.uid; // 聊天记录的本地标识
+                let msgArr = [];
+                if (this.getStroage(keychat)) {
+                    let oldMsgArr = JSON.parse(this.getStroage(keychat));
+                    msgArr = [
+                        ...oldMsgArr,
+                        {
+                            msg: sender.msg,
+                            time: new Date(),
+                            fromuid: sender.uid
+                        }
+                    ];
+                } else {
+                    msgArr.push({
+                        msg: sender.msg,
+                        time: new Date(),
+                        fromuid: sender.uid
+                    });
+                }
                 if (this.$route.name !== 'chat') {
-                    const key = this.uid + '-' + sender.uid; // 前后端标志uid
+                    const key = this.uid + '-' + sender.uid; // 前后端标志uid 用来标识未读信息的数量
                     let num = this.getStroage(key) || 0;
                     const h = this.$createElement;
                     this.msg = this.$message({
@@ -42,13 +61,20 @@ export default {
                         type: 'success'
                     });
                     this.saveStroage({
-                        [key]: ++num
+                        [key]: ++num, 
+                        [keychat]: JSON.stringify(msgArr)
                     });
                 } else {
-                    this.getShouldShowMsg({
-                        uid1: this.uid,
-                        uid2: sender.uid,
+                    // 数据库获取数据
+                    // this.getShouldShowMsg({
+                    //     uid1: this.uid,
+                    //     uid2: sender.uid,
+                    // });
+                    // 本地缓存获取数据
+                    this.saveStroage({
+                        [keychat]: JSON.stringify(msgArr)
                     });
+                    this.getShouldShowMsgFromLocal(keychat);
                     window.scrollTo(0, document.body.offsetHeight)
                 }
             });
@@ -61,6 +87,9 @@ export default {
     methods: {
         ...mapActions([
             'getShouldShowMsg'
+        ]),
+        ...mapMutations([
+            'getShouldShowMsgFromLocal'
         ]),
         goChat() {
             this.$router.push({

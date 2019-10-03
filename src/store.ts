@@ -27,6 +27,13 @@ export default new Vuex.Store({
         },
         shouldShowMsgClear(state) {
             state.shouldShowMsg = [];
+        },
+        getShouldShowMsgFromLocal(state, flag) {
+            let chatArr = [];
+            if (localStorage[flag]) {
+                chatArr = JSON.parse(localStorage[flag]);
+            }
+            state.shouldShowMsg = Object.assign([], chatArr);
         } 
     },
     actions: {
@@ -35,13 +42,13 @@ export default new Vuex.Store({
                 store.commit('changeFriends', res.data);
             })
         },
-        async getShouldShowMsg(store, params) {
-            post('/getmsgoto', {
-                uid1: params.uid1,
-                uid2: params.uid2
-            }).then((res: any) => {
-                store.commit('changeShouldShowMsg', res.data);
-            })
-        },
+        // async getShouldShowMsg(store, params) {
+        //     post('/getmsgoto', {
+        //         uid1: params.uid1,
+        //         uid2: params.uid2
+        //     }).then((res: any) => {
+        //         store.commit('changeShouldShowMsg', res.data);
+        //     })
+        // },
     },
 });

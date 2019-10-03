@@ -1,7 +1,7 @@
 import axios from 'axios';
 import socket from 'socket.io-client';
-const io = socket('ws://129.204.236.232');
-const productionBase = 'http://129.204.236.232';
+const io = socket('ws://192.168.2.191:3000');
+const productionBase = 'http://192.168.2.191:3000';
 
 export const get = (url, opt = {}) => {
     return axios.get(productionBase  + url, opt);

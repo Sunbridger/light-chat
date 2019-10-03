@@ -9,7 +9,7 @@
                 <center>{{row.time | format}}</center>
                 <p class="top-msg" 
                     :class="{fr: byme(row.fromuid), fl: !byme(row.fromuid)}">
-                    <i v-if="row.loading&&byme(row.fromuid)" class="el-icon-loading"></i>
+                    <!-- <i v-if="row.loading&&byme(row.fromuid)" class="el-icon-loading"></i> -->
                     {{row.msg}}
                     <el-avatar 
                         :class="{'el-avatar-fl': !byme(row.fromuid), 'el-avatar-fr': byme(row.fromuid)}" 
@@ -55,12 +55,13 @@ export default {
         this.init();
     },
     methods: {
-        ...mapActions([
-            'getShouldShowMsg'
-        ]),
+        // ...mapActions([
+        //     'getShouldShowMsg'
+        // ]),
         ...mapMutations([
             'changeShouldShowMsg',
-            'shouldShowMsgClear'
+            'shouldShowMsgClear',
+            'getShouldShowMsgFromLocal'
         ]),
         init() {
             this.shouldShowMsgClear();
@@ -73,10 +74,11 @@ export default {
             window.localStorage.removeItem(key);
         },
         getmsgoto() {
-            this.getShouldShowMsg({
-                uid1: this.myUid,
-                uid2: this.friend.uid 
-            });
+            // this.getShouldShowMsg({
+            //     uid1: this.myUid,
+            //     uid2: this.friend.uid 
+            // });
+            this.getShouldShowMsgFromLocal(this.myUid + '=>' + this.friend.uid);
         },
         byme(uid) {
             return  uid == this.myUid
@@ -98,19 +100,45 @@ export default {
                 msg: ct,
                 loading: true,
             });
-            post('/savemsg', {
-                from: this.myUid,
-                to: this.friend.uid,
-                msg: ct
-            }).then(({data}) => {
-                if (data) {
-                    this.getmsgoto();
-                    // 发送私信给别人
-                    wsEmit('send-private-chat', sender, this.friend.uid);
-                }
-            })
+            const keychat = this.myUid + '=>' + this.friend.uid;
+            let msgArr = [];
+            if (this.getStroage(keychat)) {
+                let oldMsgArr = JSON.parse(this.getStroage(keychat));
+                    msgArr = [
+                        ...oldMsgArr,
+                        {
+                            msg: ct,
+                            time: new Date(),
+                            fromuid: this.myUid,
+                            loading: true
+                        }
+                    ];
+            } else {
+                msgArr.push({
+                    msg: ct,
+                    time: new Date(),
+                    fromuid: this.myUid,
+                    loading: true
+                });
+            }
+            this.saveStroage({
+                [keychat]: JSON.stringify(msgArr)
+            });
+            wsEmit('send-private-chat', sender, this.friend.uid);
+            // post('/savemsg', {
+            //     from: this.myUid,
+            //     to: this.friend.uid,
+            //     msg: ct
+            // }).then(({data}) => {
+            //     if (data) {
+            //         this.getmsgoto();
+            //         // 发送私信给别人
+            //         wsEmit('send-private-chat', sender, this.friend.uid);
+            //     }
+            // })
         },
         autoBottom() {
+            console.log(this.shouldShowMsg, 'shouldShowMsg');
             window.scrollTo(0, document.body.offsetHeight)
         },
         goBack() {

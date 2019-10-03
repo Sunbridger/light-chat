@@ -37,7 +37,7 @@ router.post('/addimg', async (ctx: any) => {
     const upStream = fs.createWriteStream(filePath);
     reader.pipe(upStream);
     ctx.body = {
-        url: 'https://2261295nz5.51mypc.cn/imgs/' + file.name
+        url: 'http://localhost:8081/imgs/' + file.name
     }
 }).get('/emotions', async (ctx: any) => {
     await requestGet('https://api.weibo.com/2/emotions.json?source=1362404091').then(res => {
