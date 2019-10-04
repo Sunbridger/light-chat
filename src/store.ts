@@ -41,7 +41,7 @@ export default new Vuex.Store({
             post('/getuser', {uid: params.uid}).then((res: any) => {
                 store.commit('changeFriends', res.data);
             })
-        },
+        }
         // async getShouldShowMsg(store, params) {
         //     post('/getmsgoto', {
         //         uid1: params.uid1,
