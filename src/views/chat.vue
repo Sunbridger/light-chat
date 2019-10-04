@@ -138,7 +138,6 @@ export default {
             // })
         },
         autoBottom() {
-            console.log(this.shouldShowMsg, 'shouldShowMsg');
             window.scrollTo(0, document.body.offsetHeight)
         },
         goBack() {
