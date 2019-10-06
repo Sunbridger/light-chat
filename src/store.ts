@@ -42,6 +42,7 @@ export default new Vuex.Store({
                 store.commit('changeFriends', res.data);
             })
         }
+        // 接口获取数据库的聊天记录
         // async getShouldShowMsg(store, params) {
         //     post('/getmsgoto', {
         //         uid1: params.uid1,
