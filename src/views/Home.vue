@@ -9,13 +9,6 @@
                 <el-avatar shape="circle" :size="35" :src="myavatar"></el-avatar>
                 <span class="name-color">{{title}}</span>
             </p>
-            <!-- <el-dropdown trigger="click">
-                kkkk
-                <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item>黄金糕</el-dropdown-item>
-                    <el-dropdown-item>螺蛳粉</el-dropdown-item>
-                </el-dropdown-menu>
-            </el-dropdown> -->
             <p class="nav-p" @click="writeArtic">
                 <i class="el-icon-circle-plus-outline"></i>
             </p>
