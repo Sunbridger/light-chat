@@ -2,7 +2,7 @@
     <div class="pg-write">
         <div class="fix-top">
             <i class="el-icon-arrow-left" @click="goBack">发表文字</i>
-            
+
         </div>
         <div class="text-box">
            <el-input
@@ -42,13 +42,13 @@
 
 <script>
 import {  post } from 'api';
-import Global from '../../global.js';
+// import Global from '../../global.js';
 
 
 export default {
     name: 'write',
     data() {
-        const serviceImg = Global + 'addimg';
+        const serviceImg = process.env.VUE_APP_ADDIMG;
         return {
             params: {
                 article: '',
@@ -177,7 +177,7 @@ export default {
 
 .pg-write {
     font-weight: 100;
-    white-space: pre-wrap; 
+    white-space: pre-wrap;
     word-break: break-all;
     .fix-top {
         background-color: white;
@@ -215,7 +215,7 @@ export default {
         .el-dialog {
             width: 100%;
         }
-        
+
     }
     .bottom-box {
         display: flex;
@@ -226,5 +226,4 @@ export default {
         }
     }
 }
-    
 </style>

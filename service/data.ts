@@ -71,7 +71,7 @@ const getmsgoto = (params: {uid1: number, uid2: number}) => {
 };
 const getuser = (params: {uid: number}) => {
     const { uid } = params;
-    // limit 0,20 
+    // limit 0,20
     const _sql = `select name,online,avatar,uid from user where uid!=${uid} order by time desc,online desc`;
     return query(_sql);
 }
@@ -92,7 +92,7 @@ const whoOnline = async (uid: number) => {
     return query(_sql);
 };
 const sendArticle = (params: {ispublic: number; imgs: string; article: string; user: {uid: number; name: string; avatar: string}}) => {
-    const { user , ispublic, article, imgs = '' } = params; 
+    const { user , ispublic, article, imgs = '' } = params;
     const { uid, name, avatar } = user;
     const _sql = `insert into article (uid, name, avatar,article,ispublic,imgs ) value(${uid},'${name}','${avatar}','${article}', ${ispublic},'${imgs}')`
     return query(_sql);

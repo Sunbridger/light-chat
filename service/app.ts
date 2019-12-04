@@ -4,7 +4,7 @@ import Router from 'koa-router';
 import cors from 'koa2-cors';
 import { register, login, userInfo, savemsg, getmsgoto, getuser, online, offline, whoOnline, sendArticle, getArticle, delArticle } from './data';
 import fs from 'fs';
-import path from 'path'; 
+import path from 'path';
 import request from 'request';
 import http from 'http';
 import socket from 'socket.io';
@@ -118,12 +118,13 @@ io.on('connection', (socket: any) => {
         allUserOnline[user] = socket;
         online(user)
     });
-    
+
     // 私信
     socket.on('send-private-chat', (sender: any, receiveruid: number) => {
         const nowSocket = allUserOnline[receiveruid];
         if (nowSocket) {
             nowSocket.emit('receive-private-chat',sender);
+            console.log(sender, 'sender');
         } else {
             console.log('对方暂时不在线')
         }
