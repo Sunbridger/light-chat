@@ -1,8 +1,8 @@
 import axios from 'axios';
 import socket from 'socket.io-client';
 
-const socketUrl = process.env.VUE_APP_SOCKET;
-const apiUrl = process.env.VUE_APP_API;
+const socketUrl = 'ws://119.45.209.166:3000';
+const apiUrl = 'http://119.45.209.166:3000';
 const io = socket(socketUrl);
 
 export const get = (url, opt = {}) => {
