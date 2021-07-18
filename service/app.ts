@@ -9,7 +9,7 @@ import request from 'request';
 import http from 'http';
 import socket from 'socket.io';
 import KoaStatic from 'koa-static';
-
+// test
 const app = new Koa();
 const router = new Router();
 const staticPath =  path.resolve(__dirname, './upload');
@@ -37,7 +37,7 @@ router.post('/addimg', async (ctx: any) => {
     const upStream = fs.createWriteStream(filePath);
     reader.pipe(upStream);
     ctx.body = {
-        url: 'http://localhost:8081/imgs/' + file.name
+        url: 'http://localhost:3000/imgs/' + file.name
     }
 }).get('/emotions', async (ctx: any) => {
     await requestGet('https://api.weibo.com/2/emotions.json?source=1362404091').then(res => {

@@ -22,6 +22,7 @@ const request_1 = __importDefault(require("request"));
 const http_1 = __importDefault(require("http"));
 const socket_io_1 = __importDefault(require("socket.io"));
 const koa_static_1 = __importDefault(require("koa-static"));
+// test
 const app = new koa_1.default();
 const router = new koa_router_1.default();
 const staticPath = path_1.default.resolve(__dirname, './upload');
@@ -50,7 +51,7 @@ router.post('/addimg', (ctx) => __awaiter(this, void 0, void 0, function* () {
     const upStream = fs_1.default.createWriteStream(filePath);
     reader.pipe(upStream);
     ctx.body = {
-        url: 'http://localhost:8081/imgs/' + file.name
+        url: 'http://localhost:3000/imgs/' + file.name
     };
 })).get('/emotions', (ctx) => __awaiter(this, void 0, void 0, function* () {
     yield requestGet('https://api.weibo.com/2/emotions.json?source=1362404091').then(res => {
@@ -132,6 +133,7 @@ io.on('connection', (socket) => {
         const nowSocket = allUserOnline[receiveruid];
         if (nowSocket) {
             nowSocket.emit('receive-private-chat', sender);
+            console.log(sender, 'sender');
         }
         else {
             console.log('对方暂时不在线');

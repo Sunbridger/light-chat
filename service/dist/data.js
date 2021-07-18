@@ -10,10 +10,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const mysql = require('mysql');
 const pool = mysql.createPool({
-    host: 'localhost',
+    host: '119.45.209.166',
+    port: 3333,
     user: 'root',
     password: '123456',
-    database: 'test',
+    database: 'chat_data',
     charset: 'utf8mb4'
 });
 let query = function (sql, values) {

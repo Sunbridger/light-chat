@@ -3,8 +3,8 @@ import Router from 'vue-router';
 import Login from 'view/login.vue';
 import Register from 'view/register.vue';
 import Chat from 'view/chat.vue';
-import Home from 'view/home.vue'
-import Write from 'view/write.vue'
+import Home from 'view/Home.vue';
+import Write from 'view/write.vue';
 Vue.use(Router);
 
 
